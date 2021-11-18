@@ -1,0 +1,24 @@
+{
+  "name": "hypergameproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html -p 1337",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sudhamadhuripoojari/HyperGameProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sudhamadhuripoojari/HyperGameProject/issues"
+  },
+  "homepage": "https://github.com/sudhamadhuripoojari/HyperGameProject#readme",
+  "dependencies": {
+    "parcel-bundler": "^1.12.5",
+    "phaser": "^3.55.2"
+  }
+}
