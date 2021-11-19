@@ -41,10 +41,6 @@ export default class Game extends Phaser.Scene {
             orcs.create(xCord, yCord, 'orc')
         }
 
-        // for(let i = 0; i < 8; i++) {
-        //     addOrcs();
-        // }
-
         const orcGenLoop = this.time.addEvent({
             delay: 500,
             callback: addOrcs,
@@ -57,8 +53,6 @@ export default class Game extends Phaser.Scene {
     
 
         this.physics.add.collider(gameState.gandalf, orcs, () => {
-            // this.physics.pause();
-            // this.scene.restart();
             orcGenLoop.destroy()
             gameState.gameOver = true
             this.add.text(400, 300, 'GAME OVER', { fontSize: "32px", fill: "#ffffff"})
@@ -76,48 +70,66 @@ export default class Game extends Phaser.Scene {
             fill: "#FFF"
         })
 
+        gameState.gandalf.rotation = -1.56
+
     }
 
 
     update ()
     {
-
-        // function  createShot(){
-        //     const shots = this.physics.add.group();
-        //     shots.create(600, 500, 'shot')
-        // }
         if (gameState.gameOver)
 		{
 			return
 		}
-        
-        if (gameState.cursors.up.isDown){
-            // gameState.gandalf.setVelocityY(-200);
-            gameState.gandalf.y -= gameState.gandalfSpeed
-        } else if (gameState.cursors.down.isDown){
-            gameState.gandalf.y += gameState.gandalfSpeed
-        } else {gameState.gandalf.setVelocityY(0)}
-        if (gameState.cursors.left.isDown){
-            gameState.gandalf.x -= gameState.gandalfSpeed
-        } else if (gameState.cursors.right.isDown){
-            gameState.gandalf.x += gameState.gandalfSpeed
-        } else {gameState.gandalf.setVelocityX(0)}
-        if (Phaser.Input.Keyboard.JustDown(gameState.spacebar)){
-            gameState.shots = this.physics.add.group();
-            gameState.shots.create(gameState.gandalf.x, gameState.gandalf.y, 'shot')
-            gameState.shots.setVelocityY(gameState.gandalfSpeed * - 100)
 
-            this.physics.add.collider(orcs, gameState.shots, function (orc, shots){
-                orc.destroy();
-                shots.destroy();
-                gameState.score += 1
-                gameState.scoreText.setText(`Kills: ${gameState.score}`)
-            }) 
-        }
-        if(gameState.score >= 20){
-            this.restartGame();
-        }
+        if (gameState.cursors.left.isDown)
+    {
+        gameState.gandalf.setAngularVelocity(-200);
     }
+    else if (gameState.cursors.right.isDown)
+    {
+        gameState.gandalf.setAngularVelocity(200);
+    }
+    else
+    {
+        gameState.gandalf.setAngularVelocity(0);
+    }
+
+    if (gameState.cursors.up.isDown)
+    {
+        this.physics.velocityFromRotation(gameState.gandalf.rotation, 140, gameState.gandalf.body.velocity);
+        console.log(gameState.gandalf.rotation)
+    } else if (gameState.cursors.down.isDown)
+    {
+        this.physics.velocityFromRotation(gameState.gandalf.rotation, -140, gameState.gandalf.body.velocity);
+        console.log(gameState.gandalf.rotation)
+    }
+    else
+    {
+        gameState.gandalf.setAcceleration(0);
+        gameState.gandalf.setVelocity(0)
+    }
+
+    if (Phaser.Input.Keyboard.JustDown(gameState.spacebar)){
+        gameState.shots = this.physics.add.group();
+        gameState.shots.create(gameState.gandalf.x, gameState.gandalf.y, 'shot')
+        gameState.shots.setVelocityY(gameState.gandalfSpeed * - 100)
+
+        this.physics.add.collider(orcs, gameState.shots, function (orc, shots){
+            orc.destroy();
+            shots.destroy();
+            gameState.score += 1
+            gameState.scoreText.setText(`Kills: ${gameState.score}`)
+        }) 
+        }
+    if(gameState.score >= 20){
+        gameState.gameOver = true
+        this.add.text(400, 300, 'YOU WIN', { fontSize: "32px", fill: "#ffffff"})
+        this.input.on("pointerup", () => {
+        this.restartGame()
+        })
+    }
+ }
 
     restartGame(){
         gameState.gameOver = false
