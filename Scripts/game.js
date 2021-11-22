@@ -6,7 +6,8 @@ const gameState = {
 
     gandalfSpeed: 4,
     score: 0,
-    gameOver: false
+    gameOver: false,
+    rotation: 0,
 };
 
 
@@ -32,6 +33,26 @@ export default class Game extends Phaser.Scene {
     
     create ()
     {
+
+        const x = this.scale.width * 0.5
+	const y = this.scale.height * 0.5 
+        const rect = this.add.rectangle(x, y, 100, 50, 0xff0000, 1)
+        
+            // vector as direction only by setting the speed param to 1
+        const vec = this.physics.velocityFromAngle(rect.angle, 1)
+
+        // manually set a 50px magnitude change in x and y (dx, dy)
+        const dx = vec.x * 50
+        const dy = vec.y * 50
+
+        // draw a circle like before
+        this.add.circle(dx, dy, 10, 0xffffff, 1)
+
+        // bullet velocity using a magnitude of 300
+        const vx = vec.x * 300
+        const vy = vec.y * 300
+
+        // set the bullet's velocity with (vx, vy)
 
         orcs = this.physics.add.group()
 
@@ -84,25 +105,25 @@ export default class Game extends Phaser.Scene {
 
         if (gameState.cursors.left.isDown)
     {
-        gameState.gandalf.setAngularVelocity(-200);
+        gameState.rotation -= 3.5;
     }
     else if (gameState.cursors.right.isDown)
     {
-        gameState.gandalf.setAngularVelocity(200);
+        gameState.rotation += 3.5;
     }
-    else
-    {
-        gameState.gandalf.setAngularVelocity(0);
-    }
+    // else
+    // {
+    //     gameState.gandalf.setAngularVelocity(0);
+    // }
+
+    gameState.gandalf.angle = gameState.rotation;
 
     if (gameState.cursors.up.isDown)
     {
         this.physics.velocityFromRotation(gameState.gandalf.rotation, 140, gameState.gandalf.body.velocity);
-        console.log(gameState.gandalf.rotation)
     } else if (gameState.cursors.down.isDown)
     {
         this.physics.velocityFromRotation(gameState.gandalf.rotation, -140, gameState.gandalf.body.velocity);
-        console.log(gameState.gandalf.rotation)
     }
     else
     {
@@ -121,6 +142,15 @@ export default class Game extends Phaser.Scene {
             gameState.score += 1
             gameState.scoreText.setText(`Kills: ${gameState.score}`)
         }) 
+
+        console.log(gameState.gandalf.rotation)
+       let x = 500 * Math.sin(Math.PI * 2 * gameState.gandalf.angle / 360);
+        let y = 500 * Math.cos(Math.PI * 2 * gameState.gandalf.angle / 360);
+
+        let shot = this.physics.add.sprite(gameState.gandalf.x, gameState.gandalf.y, 'shot');
+        // gameState.shots.create(gameState.gandalf.x, gameState.gandalf.y, 'shot')
+        shot.setVelocity(x, y)
+
         }
     if(gameState.score >= 20){
         gameState.gameOver = true
@@ -137,6 +167,5 @@ export default class Game extends Phaser.Scene {
         this.scene.restart();
     }
     
-
 
 }
