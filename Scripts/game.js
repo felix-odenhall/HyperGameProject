@@ -133,8 +133,8 @@ export default class Game extends Phaser.Scene {
 
     if (Phaser.Input.Keyboard.JustDown(gameState.spacebar)){
         gameState.shots = this.physics.add.group();
-        gameState.shots.create(gameState.gandalf.x, gameState.gandalf.y, 'shot')
-        gameState.shots.setVelocityY(gameState.gandalfSpeed * - 100)
+        // gameState.shots.create(gameState.gandalf.x, gameState.gandalf.y, 'shot')
+        // gameState.shots.setVelocityY(gameState.gandalfSpeed * - 100)
 
         this.physics.add.collider(orcs, gameState.shots, function (orc, shots){
             orc.destroy();
@@ -144,8 +144,8 @@ export default class Game extends Phaser.Scene {
         }) 
 
         console.log(gameState.gandalf.rotation)
-       let x = 500 * Math.sin(Math.PI * 2 * gameState.gandalf.angle / 360);
-        let y = 500 * Math.cos(Math.PI * 2 * gameState.gandalf.angle / 360);
+       let y = 500 * Math.sin(Math.PI * 2 * gameState.gandalf.angle / 360);
+        let x = 500 * Math.cos(Math.PI * 2 * gameState.gandalf.angle / 360);
 
         let shot = this.physics.add.sprite(gameState.gandalf.x, gameState.gandalf.y, 'shot');
         // gameState.shots.create(gameState.gandalf.x, gameState.gandalf.y, 'shot')
