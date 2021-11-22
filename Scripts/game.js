@@ -115,28 +115,15 @@ export default class Game extends Phaser.Scene {
 
     // [  SPACE  ]: Shoot
     if (Phaser.Input.Keyboard.JustDown(gameState.spacebar)) {
-      gameState.shots = this.physics.add.group();
-
-      this.physics.add.collider(orcs, gameState.shots, function (orc, shots) {
-        orc.destroy();
-        shots.destroy();
-        gameState.score += 1;
-        gameState.scoreText.setText(`Kills: ${gameState.score}`);
-      });
-
-      // SHOT EQUATIONS
-      let y = 500 * Math.sin((Math.PI * 2 * gameState.gandalf.angle) / 360);
-      let x = 500 * Math.cos((Math.PI * 2 * gameState.gandalf.angle) / 360);
-
-      // SHOT SOURCE POSITION
-      let shot = this.physics.add.sprite(
-        gameState.gandalf.x,
-        gameState.gandalf.y,
-        "shot"
-      );
-      // SHOT MOVEMENT DIRECTION
-      shot.setVelocity(x, y);
+      this.createShot()
     }
+
+    this.physics.add.collider(orcs, gameState.shot, function (orc, shots) {
+      orc.destroy();
+      shots.destroy();
+      gameState.score += 1;
+      gameState.scoreText.setText(`Kills: ${gameState.score}`);
+    });
 
     if (gameState.score >= 20) {
       gameState.gameOver = true;
@@ -146,9 +133,26 @@ export default class Game extends Phaser.Scene {
       });
     }
   }
+
   restartGame() {
     gameState.gameOver = false;
     gameState.score = 0;
     this.scene.restart();
+  }
+
+  createShot(){
+    // SHOT EQUATIONS
+    let y = 500 * Math.sin((Math.PI * 2 * gameState.gandalf.angle) / 360);
+    let x = 500 * Math.cos((Math.PI * 2 * gameState.gandalf.angle) / 360);
+
+    // SHOT SOURCE POSITION
+    gameState.shot = this.physics.add.sprite(
+      gameState.gandalf.x,
+      gameState.gandalf.y,
+      "shot"
+    );
+    
+    // SHOT MOVEMENT DIRECTION
+    gameState.shot.setVelocity(x, y);
   }
 }
