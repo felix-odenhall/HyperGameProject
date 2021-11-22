@@ -115,7 +115,7 @@ export default class Game extends Phaser.Scene {
 
     // [  SPACE  ]: Shoot
     if (Phaser.Input.Keyboard.JustDown(gameState.spacebar)) {
-      this.createShot()
+      this.createShot();
     }
 
     this.physics.add.collider(orcs, gameState.shot, function (orc, shots) {
@@ -140,7 +140,7 @@ export default class Game extends Phaser.Scene {
     this.scene.restart();
   }
 
-  createShot(){
+  createShot() {
     // SHOT EQUATIONS
     let y = 500 * Math.sin((Math.PI * 2 * gameState.gandalf.angle) / 360);
     let x = 500 * Math.cos((Math.PI * 2 * gameState.gandalf.angle) / 360);
@@ -151,7 +151,7 @@ export default class Game extends Phaser.Scene {
       gameState.gandalf.y,
       "shot"
     );
-    
+
     // SHOT MOVEMENT DIRECTION
     gameState.shot.setVelocity(x, y);
   }
