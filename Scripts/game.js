@@ -30,15 +30,14 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-
     positions = {
       centerX: this.physics.world.bounds.width / 2,
       centerY: this.physics.world.bounds.height / 2,
       topEdge: 0,
       rightEdge: this.physics.world.bounds.width,
       bottomEdge: this.physics.world.bounds.height,
-      leftEdge: 0
-  };
+      leftEdge: 0,
+    };
 
     // CURSORS CURSORS CURSORS CURSORS CURSORS CURSORS CURSORS
 
@@ -54,7 +53,7 @@ export default class Game extends Phaser.Scene {
     // GANDALF GANDALF GANDALF GANDALF GANDALF GANDALF GANDALF
 
     gameState.gandalf = this.physics.add
-      .sprite(600, 500, "gandalf")
+      .sprite(positions.centerX, positions.centerY, "gandalf")
       .setCollideWorldBounds(true);
     gameState.gandalf.rotation = -1.56;
 
@@ -155,10 +154,10 @@ export default class Game extends Phaser.Scene {
       });
     });
 
-    let randomOrcSpawn = (Math.floor(Math.random() * 1000));
-            if (randomOrcSpawn > 980) {
-                this.addOrcs();
-            }
+    let randomOrcSpawn = Math.floor(Math.random() * 1000);
+    if (randomOrcSpawn > 980) {
+      this.addOrcs();
+    }
   }
 
   restartGame() {
@@ -185,23 +184,47 @@ export default class Game extends Phaser.Scene {
 
   // ADDING ORCS
   addOrcs() {
-      let randomDirection = Math.floor(Math.random() * 4);
-      if (randomDirection == 0) {
-          let newOrc = orcs.create((Math.floor(Math.random() * positions.rightEdge)), positions.topEdge - 20, "orc").setScale(0.65);
-      } else if (randomDirection == 1) {
-          orcs.create(positions.rightEdge + 20, (Math.floor(Math.random() * positions.bottomEdge)), "orc").setScale(0.65);
-      } else if (randomDirection == 2) {
-          orcs.create((Math.floor(Math.random() * positions.rightEdge)), positions.bottomEdge + 20, "orc").setScale(0.65);
-      } else if (randomDirection == 3) {
-          orcs.create(positions.leftEdge - 20, (Math.floor(Math.random() * positions.bottomEdge)), "orc").setScale(0.65);    
-      }
-      
-      Phaser.Utils.Array.Each(
-        orcs.getChildren(),
-        this.physics.moveToObject,
-        this.physics,
-        gameState.gandalf,
-        50
-      );
+    let randomDirection = Math.floor(Math.random() * 4);
+    if (randomDirection == 0) {
+      let newOrc = orcs
+        .create(
+          Math.floor(Math.random() * positions.rightEdge),
+          positions.topEdge - 20,
+          "orc"
+        )
+        .setScale(0.65);
+    } else if (randomDirection == 1) {
+      orcs
+        .create(
+          positions.rightEdge + 20,
+          Math.floor(Math.random() * positions.bottomEdge),
+          "orc"
+        )
+        .setScale(0.65);
+    } else if (randomDirection == 2) {
+      orcs
+        .create(
+          Math.floor(Math.random() * positions.rightEdge),
+          positions.bottomEdge + 20,
+          "orc"
+        )
+        .setScale(0.65);
+    } else if (randomDirection == 3) {
+      orcs
+        .create(
+          positions.leftEdge - 20,
+          Math.floor(Math.random() * positions.bottomEdge),
+          "orc"
+        )
+        .setScale(0.65);
+    }
+
+    Phaser.Utils.Array.Each(
+      orcs.getChildren(),
+      this.physics.moveToObject,
+      this.physics,
+      gameState.gandalf,
+      50
+    );
   }
 }
