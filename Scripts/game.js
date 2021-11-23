@@ -128,10 +128,12 @@ export default class Game extends Phaser.Scene {
       this.physics.pause();
       gameState.gameOver = true;
 
-      this.add.text(400, 300, "YOU WIN", {
-        fontSize: "32px",
-        fill: "#ffffff",
-      });
+      this.add
+        .text(positions.centerX, positions.centerY, "YOU WIN", {
+          fontSize: "120px",
+          fill: "#ffffff",
+        })
+        .setOrigin(0.5, 0.5);
 
       this.input.on("pointerup", () => {
         this.restartGame();
@@ -144,10 +146,12 @@ export default class Game extends Phaser.Scene {
       this.physics.pause();
       gameState.gameOver = true;
 
-      this.add.text(400, 300, "GAME OVER", {
-        fontSize: "32px",
-        fill: "#ffffff",
-      });
+      this.add
+        .text(positions.centerX, positions.centerY, "GAME OVER", {
+          fontSize: "120px",
+          fill: "#ffffff",
+        })
+        .setOrigin(0.5, 0.5);
 
       this.input.on("pointerup", () => {
         this.restartGame();
