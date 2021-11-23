@@ -7,6 +7,7 @@ const gameState = {
   gameOver: false,
   gandalfSpeed: 4,
   rotation: 0,
+  rotationSpeed: 150,
   score: 0,
 };
 
@@ -24,6 +25,7 @@ export default class Game extends Phaser.Scene {
       "shot", // SHOT
       "https://content.codecademy.com/courses/learn-phaser/physics/bug_2.png"
     );
+    this.load.image("cursor", "assets/sprites/drawcursor.png");
   }
 
   create() {
@@ -42,10 +44,18 @@ export default class Game extends Phaser.Scene {
       const xCord = Math.random() * 800;
       const yCord = Math.random() * 300;
       orcs.create(xCord, yCord, "orc");
+
+      Phaser.Utils.Array.Each(
+        orcs.getChildren(),
+        this.physics.moveToObject,
+        this.physics,
+        gameState.gandalf,
+        50
+      );
     }
 
     const orcGenLoop = this.time.addEvent({
-      delay: 500,
+      delay: 1000,
       callback: addOrcs,
       callbackScope: this,
       loop: true,
@@ -58,23 +68,14 @@ export default class Game extends Phaser.Scene {
       .setCollideWorldBounds(true);
     gameState.gandalf.rotation = -1.56;
 
-    this.physics.add.collider(gameState.gandalf, orcs, () => {
-      orcGenLoop.destroy();
-      gameState.gameOver = true;
-      this.add.text(400, 300, "GAME OVER", {
-        fontSize: "32px",
-        fill: "#ffffff",
-      });
-      this.input.on("pointerup", () => {
-        this.restartGame();
-      });
-    });
-
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
+
     gameState.scoreText = this.add.text(100, 100, `Kills: ${gameState.score}`, {
       fontSize: "32px",
       fill: "#FFF",
     });
+
+    console.log(gameState.gandalf);
   }
 
   update() {
@@ -97,14 +98,16 @@ export default class Game extends Phaser.Scene {
     if (gameState.cursors.up.isDown) {
       this.physics.velocityFromRotation(
         gameState.gandalf.rotation,
-        140,
+        gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
       // 🡻 DOWN: Move backwards
     } else if (gameState.cursors.down.isDown) {
       this.physics.velocityFromRotation(
         gameState.gandalf.rotation,
-        -140,
+        gameState.rotationSpeed -
+          gameState.rotationSpeed -
+          gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
       // NO KEY: Stop movement
@@ -118,6 +121,8 @@ export default class Game extends Phaser.Scene {
       this.createShot();
     }
 
+    // SHOT ORC COLLIDER
+
     this.physics.add.collider(orcs, gameState.shot, function (orc, shots) {
       orc.destroy();
       shots.destroy();
@@ -125,13 +130,37 @@ export default class Game extends Phaser.Scene {
       gameState.scoreText.setText(`Kills: ${gameState.score}`);
     });
 
-    if (gameState.score >= 20) {
+    // YOU WIN
+
+    if (gameState.score >= 5) {
+      this.physics.pause();
       gameState.gameOver = true;
-      this.add.text(400, 300, "YOU WIN", { fontSize: "32px", fill: "#ffffff" });
+
+      this.add.text(400, 300, "YOU WIN", {
+        fontSize: "32px",
+        fill: "#ffffff",
+      });
+
       this.input.on("pointerup", () => {
         this.restartGame();
       });
     }
+
+    // GAME OVER
+
+    this.physics.add.collider(gameState.gandalf, orcs, () => {
+      this.physics.pause();
+      gameState.gameOver = true;
+
+      this.add.text(400, 300, "GAME OVER", {
+        fontSize: "32px",
+        fill: "#ffffff",
+      });
+
+      this.input.on("pointerup", () => {
+        this.restartGame();
+      });
+    });
   }
 
   restartGame() {
