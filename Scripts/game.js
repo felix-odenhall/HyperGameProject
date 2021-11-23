@@ -2,6 +2,7 @@ import { World } from "matter";
 import Phaser from "phaser";
 
 let orcs;
+let positions;
 
 const gameState = {
   gameOver: false,
@@ -29,6 +30,16 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+
+    positions = {
+      centerX: this.physics.world.bounds.width / 2,
+      centerY: this.physics.world.bounds.height / 2,
+      topEdge: 0,
+      rightEdge: this.physics.world.bounds.width,
+      bottomEdge: this.physics.world.bounds.height,
+      leftEdge: 0
+  };
+
     // CURSORS CURSORS CURSORS CURSORS CURSORS CURSORS CURSORS
 
     gameState.cursors = this.input.keyboard.createCursorKeys();
@@ -39,27 +50,6 @@ export default class Game extends Phaser.Scene {
     // ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS
 
     orcs = this.physics.add.group();
-
-    function addOrcs() {
-      const xCord = Math.random() * 800;
-      const yCord = Math.random() * 300;
-      orcs.create(xCord, yCord, "orc");
-
-      Phaser.Utils.Array.Each(
-        orcs.getChildren(),
-        this.physics.moveToObject,
-        this.physics,
-        gameState.gandalf,
-        50
-      );
-    }
-
-    const orcGenLoop = this.time.addEvent({
-      delay: 1000,
-      callback: addOrcs,
-      callbackScope: this,
-      loop: true,
-    });
 
     // GANDALF GANDALF GANDALF GANDALF GANDALF GANDALF GANDALF
 
@@ -89,6 +79,7 @@ export default class Game extends Phaser.Scene {
     // 🡸 LEFT: Rotate left
     if (gameState.cursors.left.isDown) {
       gameState.rotation -= 3.5;
+
       // 🡺 RIGHT: Rotate right
     } else if (gameState.cursors.right.isDown) {
       gameState.rotation += 3.5;
@@ -101,6 +92,7 @@ export default class Game extends Phaser.Scene {
         gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
+
       // 🡻 DOWN: Move backwards
     } else if (gameState.cursors.down.isDown) {
       this.physics.velocityFromRotation(
@@ -110,6 +102,7 @@ export default class Game extends Phaser.Scene {
           gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
+
       // NO KEY: Stop movement
     } else {
       gameState.gandalf.setAcceleration(0);
@@ -161,6 +154,11 @@ export default class Game extends Phaser.Scene {
         this.restartGame();
       });
     });
+
+    let randomOrcSpawn = (Math.floor(Math.random() * 1000));
+            if (randomOrcSpawn > 980) {
+                this.addOrcs();
+            }
   }
 
   restartGame() {
@@ -183,5 +181,27 @@ export default class Game extends Phaser.Scene {
 
     // SHOT MOVEMENT DIRECTION
     gameState.shot.setVelocity(x, y);
+  }
+
+  // ADDING ORCS
+  addOrcs() {
+      let randomDirection = Math.floor(Math.random() * 4);
+      if (randomDirection == 0) {
+          let newOrc = orcs.create((Math.floor(Math.random() * positions.rightEdge)), positions.topEdge - 20, "orc").setScale(0.65);
+      } else if (randomDirection == 1) {
+          orcs.create(positions.rightEdge + 20, (Math.floor(Math.random() * positions.bottomEdge)), "orc").setScale(0.65);
+      } else if (randomDirection == 2) {
+          orcs.create((Math.floor(Math.random() * positions.rightEdge)), positions.bottomEdge + 20, "orc").setScale(0.65);
+      } else if (randomDirection == 3) {
+          orcs.create(positions.leftEdge - 20, (Math.floor(Math.random() * positions.bottomEdge)), "orc").setScale(0.65);    
+      }
+      
+      Phaser.Utils.Array.Each(
+        orcs.getChildren(),
+        this.physics.moveToObject,
+        this.physics,
+        gameState.gandalf,
+        50
+      );
   }
 }
