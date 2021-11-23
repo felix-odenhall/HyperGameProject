@@ -3,10 +3,13 @@ import Phaser from "phaser";
 
 let orcs;
 let positions;
+let spawnTime = 980;
 
 const gameState = {
   gameOver: false,
   gandalfSpeed: 4,
+  speedBoost: 1,
+  gandalfBoost: 10,
   rotation: 0,
   rotationSpeed: 150,
   score: 0,
@@ -124,7 +127,7 @@ export default class Game extends Phaser.Scene {
 
     // YOU WIN
 
-    if (gameState.score >= 5) {
+    if (gameState.score >= 5000) {
       this.physics.pause();
       gameState.gameOver = true;
 
@@ -159,8 +162,12 @@ export default class Game extends Phaser.Scene {
     });
 
     let randomOrcSpawn = Math.floor(Math.random() * 1000);
-    if (randomOrcSpawn > 980) {
+
+    if (randomOrcSpawn > spawnTime) {
       this.addOrcs();
+      spawnTime -= gameState.speedBoost / 10;
+      gameState.gandalfSpeed += gameState.speedBoost / gameState.gandalfBoost;
+      console.log("Gandalf Speed :" + gameState.gandalfSpeed);
     }
   }
 
@@ -222,7 +229,6 @@ export default class Game extends Phaser.Scene {
         )
         .setScale(0.65);
     }
-
     Phaser.Utils.Array.Each(
       orcs.getChildren(),
       this.physics.moveToObject,
