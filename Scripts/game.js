@@ -1,5 +1,6 @@
 import { World } from "matter";
 import Phaser from "phaser";
+import bg from "../images/bg-png.png";
 
 let orcs;
 let positions;
@@ -29,10 +30,13 @@ export default class Game extends Phaser.Scene {
       "shot", // SHOT
       "https://content.codecademy.com/courses/learn-phaser/physics/bug_2.png"
     );
-    this.load.image("cursor", "assets/sprites/drawcursor.png");
+    this.load.image("background", bg);
   }
 
   create() {
+    this.add.image(400, 300, "background").setScale(1.6);
+    console.log(bg);
+
     positions = {
       centerX: this.physics.world.bounds.width / 2,
       centerY: this.physics.world.bounds.height / 2,
