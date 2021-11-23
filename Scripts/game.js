@@ -1,6 +1,6 @@
 import { World } from "matter";
 import Phaser from "phaser";
-import bg from "../images/bg-png.png";
+import bg from "../images/background.jfif";
 
 let orcs;
 let positions;
@@ -34,7 +34,7 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(400, 300, "background").setScale(1.6);
+    this.add.image(400, 300, "background").setScale(0.5);
     console.log(bg);
 
     positions = {
