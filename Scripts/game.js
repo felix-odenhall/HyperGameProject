@@ -2,7 +2,7 @@ console.log("GameScene");
 import { World } from "matter";
 import Phaser from "phaser";
 import bg from "../images/background.jfif";
-import gandalf from "../images/Gandalf.png";
+import gandalf from "../images/wizzard_sprite.png";
 
 let orcs;
 let positions;
@@ -27,7 +27,7 @@ export default class Game extends Phaser.Scene {
       "orc", // ORC
       "https://content.codecademy.com/courses/learn-phaser/physics/bug_1.png"
     );
-    this.load.image("gandalf", gandalf);
+    this.load.spritesheet("gandalf", gandalf, { frameWidth: 32, frameHeight: 28 });
 
     // this.load.image(
     //   "gandalf", // GANDALF
@@ -66,11 +66,6 @@ export default class Game extends Phaser.Scene {
 
     // GANDALF GANDALF GANDALF GANDALF GANDALF GANDALF GANDALF
 
-    gameState.gandalf = this.physics.add
-      .sprite(positions.centerX, positions.centerY, "gandalf")
-      .setCollideWorldBounds(true);
-    gameState.gandalf.rotation = -1.56;
-
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
 
     gameState.scoreText = this.add.text(600, 25, `Kills: ${gameState.score}`, {
@@ -78,7 +73,32 @@ export default class Game extends Phaser.Scene {
       fill: "#FFF",
     });
 
+    gameState.gandalf = this.physics.add
+    .sprite(positions.centerX, positions.centerY, "gandalf")
+    .setCollideWorldBounds(true)
+    .setScale(1);
+    gameState.gandalf.rotation = -1.56;
+
+    this.anims.create({
+			key: 'walk',
+			frames: this.anims.generateFrameNumbers('gandalf', { start: 0, end: 6, }),
+			frameRate: 20,
+			repeat: -1
+		})
+
+    this.anims.create({
+			key: 'idle',
+			frames: this.anims.generateFrameNumbers('gandalf', { frame: 4 }),
+			frameRate: 1,
+			repeat: 0
+		})
+
+    this.physics.add.collider(orcs)
+    // this.physics.world.addCollider(orcs, gameState.shot)
+
     console.log(gameState.gandalf);
+
+
   }
 
   update() {
@@ -86,6 +106,7 @@ export default class Game extends Phaser.Scene {
 
     // GAME OVER: Ends update() execution
     if (gameState.gameOver) {
+      gameState.gandalf.anims.play('idle')
       return;
     }
 
@@ -105,6 +126,7 @@ export default class Game extends Phaser.Scene {
         gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
+      gameState.gandalf.anims.play('walk', true)
 
       // 🡻 DOWN: Move backwards
     } else if (gameState.cursors.down.isDown) {
@@ -115,11 +137,13 @@ export default class Game extends Phaser.Scene {
         gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
+      gameState.gandalf.anims.play('walk', true)
 
       // NO KEY: Stop movement
     } else {
       gameState.gandalf.setAcceleration(0);
       gameState.gandalf.setVelocity(0);
+      gameState.gandalf.anims.play('idle')
     }
 
     // [  SPACE  ]: Shoot
@@ -129,12 +153,13 @@ export default class Game extends Phaser.Scene {
 
     // SHOT ORC COLLIDER
 
-    this.physics.add.collider(orcs, gameState.shot, function (orc, shots) {
-      orc.destroy();
-      shots.destroy();
-      gameState.score += 1;
-      gameState.scoreText.setText(`Kills: ${gameState.score}`);
-    });
+    this.physics.add.collider(orcs, gameState.shot, this.hitOrcs, null, this);
+    // this.physics.add.overlap(orcs, gameState.shot, function (shots, orc) {
+    //   orc.destroy();
+    //   shots.destroy();
+    //   gameState.score += 1;
+    //   gameState.scoreText.setText(`Kills: ${gameState.score}`);
+    // });
 
     // YOU WIN
 
@@ -180,6 +205,7 @@ export default class Game extends Phaser.Scene {
       gameState.gandalfSpeed += gameState.speedBoost / gameState.gandalfBoost;
       console.log("Gandalf Speed :" + gameState.gandalfSpeed);
     }
+    this.orcDirection()
   }
 
   restartGame() {
@@ -220,7 +246,7 @@ export default class Game extends Phaser.Scene {
         .create(
           positions.rightEdge + 20,
           Math.floor(Math.random() * positions.bottomEdge),
-          "orc"
+          "orc",
         )
         .setScale(0.65);
     } else if (randomDirection == 2) {
@@ -240,6 +266,9 @@ export default class Game extends Phaser.Scene {
         )
         .setScale(0.65);
     }
+  }
+
+  orcDirection(){
     Phaser.Utils.Array.Each(
       orcs.getChildren(),
       this.physics.moveToObject,
@@ -248,4 +277,12 @@ export default class Game extends Phaser.Scene {
       50
     );
   }
+
+  hitOrcs(orc, shots)
+	{
+    orc.destroy();
+    shots.destroy();
+    gameState.score += 1;
+    gameState.scoreText.setText(`Kills: ${gameState.score}`);
+	}
 }
