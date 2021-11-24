@@ -1,6 +1,8 @@
+console.log("GameScene");
 import { World } from "matter";
 import Phaser from "phaser";
 import bg from "../images/background.jfif";
+import gandalf from "../images/Gandalf.png";
 
 let orcs;
 let positions;
@@ -17,15 +19,20 @@ const gameState = {
 };
 
 export default class Game extends Phaser.Scene {
+  constructor() {
+    super({ key: 'Game' })
+  }
   preload() {
     this.load.image(
       "orc", // ORC
       "https://content.codecademy.com/courses/learn-phaser/physics/bug_1.png"
     );
-    this.load.image(
-      "gandalf", // GANDALF
-      "https://content.codecademy.com/courses/learn-phaser/physics/codey.png"
-    );
+    this.load.image("gandalf", gandalf);
+
+    // this.load.image(
+    //   "gandalf", // GANDALF
+    //   "https://content.codecademy.com/courses/learn-phaser/physics/codey.png"
+    // );
     this.load.image(
       "shot", // SHOT
       "https://content.codecademy.com/courses/learn-phaser/physics/bug_2.png"
@@ -66,7 +73,7 @@ export default class Game extends Phaser.Scene {
 
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
 
-    gameState.scoreText = this.add.text(100, 100, `Kills: ${gameState.score}`, {
+    gameState.scoreText = this.add.text(600, 25, `Kills: ${gameState.score}`, {
       fontSize: "32px",
       fill: "#FFF",
     });
@@ -104,8 +111,8 @@ export default class Game extends Phaser.Scene {
       this.physics.velocityFromRotation(
         gameState.gandalf.rotation,
         gameState.rotationSpeed -
-          gameState.rotationSpeed -
-          gameState.rotationSpeed,
+        gameState.rotationSpeed -
+        gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
 
