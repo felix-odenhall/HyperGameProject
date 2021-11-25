@@ -1,8 +1,10 @@
 console.log("GameScene");
 import { World } from "matter";
 import Phaser from "phaser";
-import bg from "../images/background.jfif";
+import bg from "../images/bg-png2.png";
 import gandalf from "../images/wizzard_sprite.png";
+import shot from "../images/shot.png";
+import gandalfShoot from "../images/gandalf_shoot_sprite.png";
 
 let orcs;
 let positions;
@@ -29,19 +31,21 @@ export default class Game extends Phaser.Scene {
     );
     this.load.spritesheet("gandalf", gandalf, { frameWidth: 32, frameHeight: 28 });
 
+    this.load.spritesheet("gandalfShoot", gandalf, { frameWidth: 32, frameHeight: 28 });
+
     // this.load.image(
     //   "gandalf", // GANDALF
     //   "https://content.codecademy.com/courses/learn-phaser/physics/codey.png"
     // );
     this.load.image(
       "shot", // SHOT
-      "https://content.codecademy.com/courses/learn-phaser/physics/bug_2.png"
+      shot
     );
     this.load.image("background", bg);
   }
 
   create() {
-    this.add.image(400, 300, "background").setScale(0.5);
+    this.add.image(400, 300, "background").setScale(1);
     console.log(bg);
 
     positions = {
@@ -76,8 +80,16 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf = this.physics.add
     .sprite(positions.centerX, positions.centerY, "gandalf")
     .setCollideWorldBounds(true)
-    .setScale(1);
+    .setScale(1.5)
+    .setBodySize(20, 20)
     gameState.gandalf.rotation = -1.56;
+
+    this.anims.create({
+			key: 'shoot',
+			frames: this.anims.generateFrameNumbers('gandalfShoot', { start: 0, end: 3, }),
+			frameRate: 20,
+      repeat: -1
+		})
 
     this.anims.create({
 			key: 'walk',
@@ -92,9 +104,9 @@ export default class Game extends Phaser.Scene {
 			frameRate: 1,
 			repeat: 0
 		})
-
-    this.physics.add.collider(orcs)
     // this.physics.world.addCollider(orcs, gameState.shot)
+
+    this.physics.add.collider(orcs, orcs)
 
     console.log(gameState.gandalf);
 
@@ -149,11 +161,15 @@ export default class Game extends Phaser.Scene {
     // [  SPACE  ]: Shoot
     if (Phaser.Input.Keyboard.JustDown(gameState.spacebar)) {
       this.createShot();
+      gameState.gandalf.anims.play('shoot', true)
+      console.log(gandalfShoot)
     }
 
     // SHOT ORC COLLIDER
 
-    this.physics.add.collider(orcs, gameState.shot, this.hitOrcs, null, this);
+    
+
+    this.physics.add.collider([orcs], gameState.shot, this.hitOrcs, null, this);
     // this.physics.add.overlap(orcs, gameState.shot, function (shots, orc) {
     //   orc.destroy();
     //   shots.destroy();
