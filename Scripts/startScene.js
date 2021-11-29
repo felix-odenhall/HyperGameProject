@@ -1,6 +1,7 @@
 
 import Phaser from "phaser";
-import bg from "../images/bg-png2.png";
+import bg from "../images/background_stone.png";
+import darkness from "../images/darkness.png";
 
 export default class StartScene extends Phaser.Scene {
     constructor() {
@@ -17,24 +18,24 @@ export default class StartScene extends Phaser.Scene {
         this.add.text(280, 210, 'Game!', { fill: '#ffffff', fontSize: '100px' });
         this.input.on('pointerdown', () => {
             this.scene.stop('StartScene')
-            this.scene.start('Game')
+            this.scene.start('PracticeScene')
         })
     }
 }
 
-var config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    backgroundColor: "#4488aa",
-    scene: [StartScene],
-    physics: {
-        default: "arcade",
-        arcade: {
-            gravity: { y: 0 },
-            debug: true,
-        },
-    },
-};
+// var config = {
+//     type: Phaser.AUTO,
+//     width: 800,
+//     height: 600,
+//     backgroundColor: "#4488aa",
+//     scene: [StartScene],
+//     physics: {
+//         default: "arcade",
+//         arcade: {
+//             gravity: { y: 0 },
+//             debug: true,
+//         },
+//     },
+// };
 
 // var start = new Phaser.Game(config);
