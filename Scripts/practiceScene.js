@@ -5,6 +5,12 @@ import bg from "../images/background_stone.png";
 import gandalf from "../images/wizzard_sprite.png";
 import shot from "../images/shot.png";
 import gandalfShoot from "../images/gandalf_shoot_sprite.png";
+import arrowUp from "../images/arrowup.png";
+import arrowDown from "../images/arrowDown.png";
+import arrowRight from "../images/arrowRight.png";
+import arrowLeft from "../images/arrowLeft.png";
+import spaceKey from "../images/space_key.png";
+
 
 let orcs;
 let positions;
@@ -14,7 +20,7 @@ const gameState = {
   gandalfSpeed: 4,
   speedBoost: 1,
   gandalfBoost: 10,
-  rotation: 0,
+  rotation: 270,
   rotationSpeed: 150,
   score: 0,
   tutorial: 0,
@@ -31,12 +37,14 @@ export default class Game extends Phaser.Scene {
     );
     this.load.spritesheet("gandalf", gandalf, { frameWidth: 32, frameHeight: 28 });
 
-    this.load.spritesheet("gandalfShoot", gandalf, { frameWidth: 32, frameHeight: 28 });
+    this.load.spritesheet("gandalfShoot", gandalfShoot, { frameWidth: 32, frameHeight: 28 });
 
-    // this.load.image(
-    //   "gandalf", // GANDALF
-    //   "https://content.codecademy.com/courses/learn-phaser/physics/codey.png"
-    // );
+    this.load.spritesheet("arrowUp", arrowUp, { frameWidth: 96, frameHeight: 96 });
+    this.load.spritesheet("arrowDown", arrowDown, { frameWidth: 96, frameHeight: 96 });
+    this.load.spritesheet("arrowRight", arrowRight, { frameWidth: 96, frameHeight: 96 });
+    this.load.spritesheet("arrowLeft", arrowLeft, { frameWidth: 96, frameHeight: 96 });
+    this.load.spritesheet("spaceKey", spaceKey, { frameWidth: 384, frameHeight: 96 });
+
     this.load.image(
       "shot", // SHOT
       shot
@@ -78,28 +86,106 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf.rotation = -1.56;
 
     this.anims.create({
-			key: 'shoot',
-			frames: this.anims.generateFrameNumbers('gandalfShoot', { start: 0, end: 3, }),
-			frameRate: 20,
-            repeat: -1
-		})
-
-    this.anims.create({
 			key: 'walk',
 			frames: this.anims.generateFrameNumbers('gandalf', { start: 0, end: 6, }),
 			frameRate: 20,
-			repeat: -1
+			repeat: 0
 		})
 
     this.anims.create({
 			key: 'idle',
-			frames: this.anims.generateFrameNumbers('gandalf', { frame: 4 }),
+			frames: [ { key: 'gandalf', frame: 3 } ],
 			frameRate: 1,
 			repeat: 0
+		})
+
+    this.anims.create({
+			key: 'shoot',
+			frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 3, }),
+			frameRate: 20,
+            repeat: 0
 		})
     // this.physics.world.addCollider(orcs, gameState.shot)
 
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
+
+    gameState.arrowUp = this.add.sprite(650, 450, "arrowUp").setDepth(4).setScale(0.6)
+
+    this.anims.create({
+			key: 'upGrey',
+			frames: [ { key: 'arrowUp', frame: 0 } ],
+			frameRate: 1,
+			repeat: 0
+		})
+    this.anims.create({
+			key: 'upGreen',
+			frames: [ { key: 'arrowUp', frame: 1 } ],
+			frameRate: 1,
+			repeat: 0
+		})
+
+    gameState.arrowDown = this.add.sprite(650, 500, "arrowDown").setDepth(4).setScale(0.6)
+
+    this.anims.create({
+			key: 'downGrey',
+			frames: [ { key: 'arrowDown', frame: 0 } ],
+			frameRate: 1,
+			repeat: 0
+		})
+    this.anims.create({
+			key: 'downGreen',
+			frames: [ { key: 'arrowDown', frame: 1 } ],
+			frameRate: 1,
+			repeat: 0
+		})
+
+    gameState.arrowRight = this.add.sprite(700, 500, "arrowRight").setDepth(4).setScale(0.6)
+
+    this.anims.create({
+			key: 'rightGrey',
+			frames: [ { key: 'arrowRight', frame: 0 } ],
+			frameRate: 1,
+			repeat: 0
+		})
+    this.anims.create({
+			key: 'rightGreen',
+			frames: [ { key: 'arrowRight', frame: 1 } ],
+			frameRate: 1,
+			repeat: 0
+		})
+
+    gameState.arrowLeft = this.add.sprite(600, 500, "arrowLeft").setDepth(4).setScale(0.6)
+
+    this.anims.create({
+			key: 'leftGrey',
+			frames: [ { key: 'arrowLeft', frame: 0 } ],
+			frameRate: 1,
+			repeat: 0
+		})
+    this.anims.create({
+			key: 'leftGreen',
+			frames: [ { key: 'arrowLeft', frame: 1 } ],
+			frameRate: 1,
+			repeat: 0
+		})
+
+    gameState.spaceKey = this.add.sprite(300, 500, "spaceKey").setDepth(4).setScale(0.6)
+
+    this.anims.create({
+			key: 'spaceGrey',
+			frames: [ { key: 'spaceKey', frame: 0 } ],
+			frameRate: 1,
+			repeat: 0
+		})
+    this.anims.create({
+			key: 'spaceGreen',
+			frames: [ { key: 'spaceKey', frame: 1 } ],
+			frameRate: 1,
+			repeat: 0
+		})
+
+    
+
 
     gameState.scoreText = this.add.text(600, 25, `Kills: ${gameState.score}`, {
       fontSize: "32px",
@@ -124,11 +210,18 @@ export default class Game extends Phaser.Scene {
     // 🡸 LEFT: Rotate left
     if (gameState.cursors.left.isDown) {
       gameState.rotation -= 3.5;
-
-      // 🡺 RIGHT: Rotate right
-    } else if (gameState.cursors.right.isDown) {
-      gameState.rotation += 3.5;
+      gameState.arrowLeft.anims.play('leftGreen', true)
     }
+      // 🡺 RIGHT: Rotate right
+    
+    else if (gameState.cursors.right.isDown) {
+      gameState.rotation += 3.5;
+      gameState.arrowRight.anims.play('rightGreen', true)
+    } else {
+      gameState.arrowRight.anims.play('rightGrey', true)
+      gameState.arrowLeft.anims.play('leftGrey', true)
+    }
+
 
     // 🡹 UP: Move forward
     if (gameState.cursors.up.isDown) {
@@ -138,7 +231,7 @@ export default class Game extends Phaser.Scene {
         gameState.gandalf.body.velocity
       );
       gameState.gandalf.anims.play('walk', true)
-      this.turnOrcs(orcs);
+      gameState.arrowUp.anims.play('upGreen', true)
 
 
       // 🡻 DOWN: Move backwards
@@ -151,25 +244,29 @@ export default class Game extends Phaser.Scene {
         gameState.gandalf.body.velocity
       );
       gameState.gandalf.anims.play('walk', true)
-      this.turnOrcs(orcs);
+      gameState.arrowDown.anims.play('downGreen', true)
 
       // NO KEY: Stop movement
     } else {
       gameState.gandalf.setAcceleration(0);
       gameState.gandalf.setVelocity(0);
-      gameState.gandalf.anims.play('idle')
-    }
-
-    if(gameState.cursors.down.isDown){
-        this.add.text(600, 200, 'Good, you are moving backwards!');
+      gameState.arrowUp.anims.play('upGrey', true)
+      gameState.arrowDown.anims.play('downGrey', true)
     }
 
 
     // [  SPACE  ]: Shoot
     if (Phaser.Input.Keyboard.JustDown(gameState.spacebar)) {
       this.createShot();
-      gameState.gandalf.anims.play('shoot', true)
-      console.log(gandalfShoot)
+      gameState.spaceKey.anims.play('spaceGreen', true)
+    } else {
+      gameState.spaceKey.anims.play('spaceGrey', true)
+    }
+
+    if (gameState.cursors.space.isDown) {
+      gameState.spaceKey.anims.play('spaceGreen', true)
+    } else {
+      gameState.spaceKey.anims.play('spaceGrey', true)
     }
 
     // SHOT ORC COLLIDER
@@ -183,17 +280,18 @@ export default class Game extends Phaser.Scene {
       this.physics.pause();
       gameState.gameOver = true;
 
-      this.add
-        .text(positions.centerX, positions.centerY, "Good job, you are now ready for the real challenge", {
-          fontSize: "20px",
-          fill: "#ffffff",
-        })
-        .setOrigin(0.5, 0.5);
+        const startGame = this.add.text(100, 200, 'Start Game', { fill: '#0f0' });
+        startGame.setInteractive();
+        startGame.on('pointerdown', () => {
+            this.scene.stop('PracticeScene')
+            this.scene.start('Game') });
 
       this.input.on("pointerup", () => {
         this.scene.start('Game');
       });
     }
+
+    this.turnOrcs(orcs);
 
     // GAME OVER
   }
@@ -228,6 +326,8 @@ export default class Game extends Phaser.Scene {
     );
     // SHOT MOVEMENT DIRECTION
     gameState.shot.setVelocity(x, y)
+
+    gameState.gandalf.anims.play('shoot', true)
   }
 
   hitOrcs(orc, shots)
