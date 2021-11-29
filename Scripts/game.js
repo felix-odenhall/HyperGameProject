@@ -17,7 +17,7 @@ const gameState = {
   rotation: 0,
   rotationSpeed: 150,
   score: 0,
-  highScore: [0, 0, 0, 0, 0],
+  highScore: [1, 1, 1, 1, 1],
 };
 
 export default class Game extends Phaser.Scene {
@@ -226,7 +226,9 @@ export default class Game extends Phaser.Scene {
 
       this.input.on("pointerup", () => {
         var highScoreList = document.getElementById("high-score");
-        highScoreList.parentNode.removeChild(highScoreList);
+        if (document.getElementById("high-score")) {
+          highScoreList.parentNode.removeChild(highScoreList);
+        }
         this.restartGame();
       });
       return;
@@ -342,27 +344,28 @@ export default class Game extends Phaser.Scene {
       });
       gameState.highScore.shift();
       gameState.highScore.push(score);
+
+      let div = document.createElement("div");
+      let ol = document.createElement("ol");
+      let h2 = document.createElement("h2");
+      div.id = "high-score";
+      h2.innerText = "New High Score!";
+      div.appendChild(h2);
+      div.appendChild(ol);
+      document.querySelector("body").appendChild(div);
+
+      let sortedHighScore = gameState.highScore.sort(function (a, b) {
+        return a - b;
+      });
+      sortedHighScore.reverse();
+
+      for (let i = 0; i < sortedHighScore.length; ++i) {
+        let li = document.createElement("li");
+        li.innerText = sortedHighScore[i];
+        ol.appendChild(li);
+        console.log("Done");
+      }
     }
-
-    let div = document.createElement("div");
-    let ol = document.createElement("ol");
-    let h2 = document.createElement("h2");
-    div.id = "high-score";
-    h2.innerText = "New High Score!";
-    div.appendChild(h2);
-    div.appendChild(ol);
-    document.querySelector("body").appendChild(div);
-
-    let sortedHighScore = gameState.highScore.sort(function (a, b) {
-      return a - b;
-    });
-    sortedHighScore.reverse();
-
-    for (let i = 0; i < sortedHighScore.length; ++i) {
-      let li = document.createElement("li");
-      li.innerText = sortedHighScore[i];
-      ol.appendChild(li);
-      console.log("Done");
-    }
+    return;
   };
 }
