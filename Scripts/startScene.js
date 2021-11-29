@@ -1,19 +1,27 @@
 
 import Phaser from "phaser";
 import bg from "../images/background_stone.png";
+import cover from "../images/cover.jpg";
 import darkness from "../images/darkness.png";
+import startAudio from "../images/startAudio.mp3";
 
 export default class StartScene extends Phaser.Scene {
     constructor() {
         super({ key: 'StartScene' })
     }
     preload() {
+        this.load.audio("startAudio", startAudio);
         this.load.image("background", bg);
+        this.load.image("cover", cover);
+
     }
 
     create() {
-
+        var gameSound = this.sound.add("startAudio");
+        // gameSound.loop = true;
+        gameSound.play();
         this.add.image(400, 300, "background").setScale(1);
+        this.add.image(400, 300, "cover").setScale(0.6);
         this.add.text(150, 150, 'Click to start', { fill: '#ffffff', fontSize: '60px' });
         this.add.text(280, 210, 'Game!', { fill: '#ffffff', fontSize: '100px' });
         this.input.on('pointerdown', () => {
