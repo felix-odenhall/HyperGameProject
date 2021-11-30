@@ -125,12 +125,9 @@ export default class Game extends Phaser.Scene {
 
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
 
-    gameState.scoreText = this.add
-      .text(600, 25, `Kills: ${gameState.score}`, {
-        fontSize: "32px",
-        fill: "#FFF",
-      })
-      .setDepth(4);
+    let h3 = document.createElement("h3");
+    h3.innerHTML = `Kills: ${gameState.score}`;
+    document.body.appendChild(h3);
   }
 
   update() {
@@ -233,6 +230,7 @@ export default class Game extends Phaser.Scene {
         }
         document.querySelector("h1").setAttribute("style", "color: inherit");
         document.querySelector("h1").innerText = "Name of the Game";
+        document.querySelector("h3").remove();
         this.restartGame();
       });
       return;
@@ -325,7 +323,7 @@ export default class Game extends Phaser.Scene {
     orc.destroy();
     shots.destroy();
     gameState.score += 1;
-    gameState.scoreText.setText(`Kills: ${gameState.score}`);
+    document.querySelector("h3").innerHTML = `Kills: ${gameState.score}`;
   }
 
   turnOrcs = function (type) {
