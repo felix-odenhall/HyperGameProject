@@ -4,6 +4,8 @@ import gandalf from "../images/wizzard_sprite.png";
 import shot from "../images/shot.png";
 import gandalfShoot from "../images/gandalf_shoot_sprite.png";
 import darkness from "../images/darkness.png";
+import dead from "../images/dead.mp3";
+
 
 let orcs;
 let positions;
@@ -50,6 +52,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("background", bg);
 
     this.load.image("darkness", darkness);
+    this.load.audio("dead", dead);
   }
 
   create() {
@@ -163,8 +166,8 @@ export default class Game extends Phaser.Scene {
       this.physics.velocityFromRotation(
         gameState.gandalf.rotation,
         gameState.rotationSpeed -
-          gameState.rotationSpeed -
-          gameState.rotationSpeed,
+        gameState.rotationSpeed -
+        gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
 
@@ -212,8 +215,11 @@ export default class Game extends Phaser.Scene {
     // GAME OVER
 
     this.physics.add.collider(gameState.gandalf, orcs, () => {
+      var playerDead = this.sound.add("dead");
+      // gameSound.loop = true;
+      playerDead.autoplay = true;
+      playerDead.play();
       this.physics.pause();
-      gameState.gameOver = true;
 
       // Checks if this is a new high score.
       this.addToHighScore(gameState.score);
