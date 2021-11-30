@@ -4,10 +4,12 @@ import gandalf from "../images/wizzard_sprite.png";
 import shot from "../images/shot.png";
 import gandalfShoot from "../images/gandalf_shoot_sprite.png";
 import darkness from "../images/darkness.png";
+import orcSprite from "../images/orc_sprite.png"
 
 let orcs;
 let positions;
 let spawnTime = 980;
+let newOrc;
 
 const gameState = {
   gameOver: false,
@@ -25,10 +27,10 @@ export default class Game extends Phaser.Scene {
     super({ key: "Game" });
   }
   preload() {
-    this.load.image(
-      "orc", // ORC
-      "https://content.codecademy.com/courses/learn-phaser/physics/bug_1.png"
-    );
+    // this.load.image(
+    //   "orc", // ORC
+    //   "https://content.codecademy.com/courses/learn-phaser/physics/bug_1.png"
+    // );
     this.load.spritesheet("gandalf", gandalf, {
       frameWidth: 32,
       frameHeight: 28,
@@ -36,6 +38,7 @@ export default class Game extends Phaser.Scene {
 
     this.load.spritesheet("gandalfShoot", gandalfShoot, { frameWidth: 32, frameHeight: 28 });
 
+    this.load.spritesheet("orc", orcSprite, { frameWidth: 48, frameHeight: 48 });
     // this.load.image(
     //   "gandalf", // GANDALF
     //   "https://content.codecademy.com/courses/learn-phaser/physics/codey.png"
@@ -57,6 +60,13 @@ export default class Game extends Phaser.Scene {
       frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 3, }),
       frameRate: 20,
       repeat: 0
+    })
+
+    this.anims.create({
+      key: 'orcSprite',
+      frames: this.anims.generateFrameNumbers("orc", { start: 0, end: 3, }),
+      frameRate: 12,
+      repeat: -1
     })
 
     this.add.image(400, 300, "background").setScale(1);
@@ -282,37 +292,42 @@ export default class Game extends Phaser.Scene {
   addOrcs() {
     let randomDirection = Math.floor(Math.random() * 4);
     if (randomDirection == 0) {
-      let newOrc = orcs
+      orcs
         .create(
           Math.floor(Math.random() * positions.rightEdge),
           positions.topEdge - 20,
-          "orc"
         )
-        .setScale(0.65);
+        .setScale(0.8)
+        .anims.play("orcSprite", true);
+        // newOrc.anims.play('orcSprite')
     } else if (randomDirection == 1) {
       orcs
         .create(
           positions.rightEdge + 20,
           Math.floor(Math.random() * positions.bottomEdge),
-          "orc"
         )
-        .setScale(0.65);
+        .setScale(0.8)
+        .anims.play("orcSprite", true);
+        // newOrc.anims.play('orcSprite')
     } else if (randomDirection == 2) {
       orcs
         .create(
           Math.floor(Math.random() * positions.rightEdge),
           positions.bottomEdge + 20,
-          "orc"
         )
-        .setScale(0.65);
+        .setScale(0.8)
+        .anims.play("orcSprite"), true;
+        // newOrc.anims.play('orcSprite')
     } else if (randomDirection == 3) {
       orcs
         .create(
           positions.leftEdge - 20,
           Math.floor(Math.random() * positions.bottomEdge),
-          "orc"
         )
-        .setScale(0.65);
+        .setScale(0.8)
+        .anims.play("orcSprite", true);
+
+        // newOrc.anims.play('orcSprite')
     }
   }
 
