@@ -55,7 +55,8 @@ export default class Game extends Phaser.Scene {
 
   create() {
     this.add.image(400, 300, "background").setScale(1);
-
+    this.add.text(10, 540, 'Press the arrow keys to move the Gandalf,', { fill: '#0f0', fontSize: '20px' });
+    this.add.text(10, 570, 'Press the SpaceBar to shoot', { fill: '#0f0', fontSize: '20px' });
     positions = {
       centerX: this.physics.world.bounds.width / 2,
       centerY: this.physics.world.bounds.height / 2,
