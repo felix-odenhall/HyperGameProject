@@ -17,11 +17,12 @@ export default class StartScene extends Phaser.Scene {
     }
 
     create() {
+        // Audio for StartScene
         var gameSound = this.sound.add("startAudio");
-        // gameSound.loop = true;
+        gameSound.autoplay = true;
         gameSound.play();
-        this.add.image(400, 300, "background").setScale(1);
 
+        this.add.image(400, 300, "background").setScale(1);
         this.add.image(400, 300, "cover").setScale(0.6);
 
         // this.add.text(150, 150, 'Click to start', { fill: '#ffffff', fontSize: '60px' });

@@ -5,6 +5,8 @@ import shot from "../images/shot.png";
 import gandalfShoot from "../images/gandalf_shoot_sprite.png";
 import darkness from "../images/darkness.png";
 import orcSprite from "../images/orc_sprite.png"
+import dead from "../images/dead.mp3";
+
 
 let orcs;
 let positions;
@@ -36,7 +38,10 @@ export default class Game extends Phaser.Scene {
       frameHeight: 28,
     });
 
-    this.load.spritesheet("gandalfShoot", gandalfShoot, { frameWidth: 32, frameHeight: 28 });
+    this.load.spritesheet("gandalfShoot", gandalfShoot, {
+      frameWidth: 32,
+      frameHeight: 28,
+    });
 
     this.load.spritesheet("orc", orcSprite, { frameWidth: 48, frameHeight: 48 });
     // this.load.image(
@@ -50,17 +55,21 @@ export default class Game extends Phaser.Scene {
     this.load.image("background", bg);
 
     this.load.image("darkness", darkness);
+    this.load.audio("dead", dead);
+
   }
 
   create() {
-
-
     this.anims.create({
-      key: 'shoot',
-      frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 3, }),
+      key: "shoot",
+      frames: this.anims.generateFrameNumbers("gandalfShoot", {
+        start: 0,
+        end: 3,
+      }),
       frameRate: 20,
-      repeat: 0
-    })
+      repeat: 0,
+    });
+
 
     this.anims.create({
       key: 'orcSprite',
@@ -70,7 +79,6 @@ export default class Game extends Phaser.Scene {
     })
 
     this.add.image(400, 300, "background").setScale(1);
-    console.log(bg);
 
     positions = {
       centerX: this.physics.world.bounds.width / 2,
@@ -79,7 +87,7 @@ export default class Game extends Phaser.Scene {
       rightEdge: this.physics.world.bounds.width,
       bottomEdge: this.physics.world.bounds.height,
       leftEdge: 0,
-    };
+    }
 
     // CURSORS CURSORS CURSORS CURSORS CURSORS CURSORS CURSORS
 
@@ -102,19 +110,21 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf.rotation = -1.56;
 
     this.anims.create({
-
-      key: 'shoot',
-      frames: this.anims.generateFrameNumbers('gandalfShoot', { start: 0, end: 3, }),
+      key: "shoot",
+      frames: this.anims.generateFrameNumbers("gandalfShoot", {
+        start: 0,
+        end: 3,
+      }),
       frameRate: 20,
-      repeat: 0
-    })
+      repeat: 0,
+    });
 
     this.anims.create({
-      key: 'walk',
-      frames: this.anims.generateFrameNumbers('gandalf', { start: 0, end: 6, }),
+      key: "walk",
+      frames: this.anims.generateFrameNumbers("gandalf", { start: 0, end: 6 }),
       frameRate: 20,
-      repeat: 0
-    })
+      repeat: 0,
+    });
 
     this.anims.create({
       key: "idle",
@@ -126,18 +136,13 @@ export default class Game extends Phaser.Scene {
 
     this.physics.add.collider(orcs, orcs);
 
-    console.log(gameState.gandalf);
-
     this.add.image(400, 300, "darkness").setDepth(3);
 
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
 
-    gameState.scoreText = this.add
-      .text(600, 25, `Kills: ${gameState.score}`, {
-        fontSize: "32px",
-        fill: "#FFF",
-      })
-      .setDepth(4);
+    let h3 = document.createElement("h3");
+    h3.innerHTML = `Kills: ${gameState.score}`;
+    document.body.appendChild(h3);
   }
 
   update() {
@@ -166,9 +171,7 @@ export default class Game extends Phaser.Scene {
         gameState.gandalf.body.velocity
       );
 
-      gameState.gandalf.anims.play('walk', true)
-
-
+      gameState.gandalf.anims.play("walk", true);
 
       // 🡻 DOWN: Move backwards
     } else if (gameState.cursors.down.isDown) {
@@ -180,14 +183,12 @@ export default class Game extends Phaser.Scene {
         gameState.gandalf.body.velocity
       );
 
-      gameState.gandalf.anims.play('walk', true)
-
+      gameState.gandalf.anims.play("walk", true);
 
       // NO KEY: Stop movement
     } else {
       gameState.gandalf.setAcceleration(0);
       gameState.gandalf.setVelocity(0);
-
     }
 
     // [  SPACE  ]: Shoot
@@ -226,24 +227,31 @@ export default class Game extends Phaser.Scene {
     // GAME OVER
 
     this.physics.add.collider(gameState.gandalf, orcs, () => {
+      
+      // Audio when Gandalf's Dead
+      var playerDead = this.sound.add("dead");
+      playerDead.autoplay = true;
+      playerDead.play();
+      
+      //Pauses the Game
       this.physics.pause();
-      gameState.gameOver = true;
 
-      // Checks if this is a new high score
+      // Checks if this is a new high score.
       this.addToHighScore(gameState.score);
 
-      this.add
-        .text(positions.centerX, positions.centerY, "GAME OVER", {
-          fontSize: "120px",
-          fill: "#ffffff",
-        })
-        .setOrigin(0.5, 0.5);
+      // Changes game title to "Game Over"
+      document.querySelector("h1").setAttribute("style", "color: tomato");
+      document.querySelector("h1").innerText = "Game Over";
 
+      // Restarts the game on pointer-up.
       this.input.on("pointerup", () => {
         var highScoreList = document.getElementById("high-score");
         if (document.getElementById("high-score")) {
           highScoreList.parentNode.removeChild(highScoreList);
         }
+        document.querySelector("h1").setAttribute("style", "color: inherit");
+        document.querySelector("h1").innerText = "Name of the Game";
+        document.querySelector("h3").remove();
         this.restartGame();
       });
       return;
@@ -256,9 +264,8 @@ export default class Game extends Phaser.Scene {
       spawnTime -= gameState.speedBoost / 10;
       gameState.gandalfSpeed += gameState.speedBoost / gameState.gandalfBoost;
     }
-    this.orcDirection()
+    this.orcDirection();
     this.turnOrcs(orcs);
-
   }
 
   restartGame() {
@@ -280,12 +287,9 @@ export default class Game extends Phaser.Scene {
     );
     // SHOT MOVEMENT DIRECTION
 
-    gameState.shot.setVelocity(x, y)
+    gameState.shot.setVelocity(x, y);
 
-    gameState.gandalf.anims.play('shoot', true)
-
-    console.log("hello")
-
+    gameState.gandalf.anims.play("shoot", true);
   }
 
   // ADDING ORCS
@@ -345,8 +349,7 @@ export default class Game extends Phaser.Scene {
     orc.destroy();
     shots.destroy();
     gameState.score += 1;
-    gameState.scoreText.setText(`Kills: ${gameState.score}`);
-
+    document.querySelector("h3").innerHTML = `Kills: ${gameState.score}`;
   }
 
   turnOrcs = function (type) {
@@ -365,7 +368,6 @@ export default class Game extends Phaser.Scene {
 
   addToHighScore = function (score) {
     const min = Math.min(...gameState.highScore);
-    console.log(min);
 
     if (score > min) {
       gameState.highScore.sort(function (a, b) {
@@ -392,7 +394,6 @@ export default class Game extends Phaser.Scene {
         let li = document.createElement("li");
         li.innerText = sortedHighScore[i];
         ol.appendChild(li);
-        console.log("Done");
       }
     }
     return;

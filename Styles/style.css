@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap');
+:root {
+  --border-color: #111;
+}
 
 * {
   padding: 0;
@@ -22,8 +25,7 @@ body {
 
 canvas {
   display: block;
-  border: 0.5rem solid black;
-  border-radius: 2rem; 
+  border: 0.5rem solid var(--border-color);
 }
 
 h1 {
@@ -35,6 +37,15 @@ h1 {
 
 h2 {
   padding-bottom: 2rem;
+}
+
+h3 {
+  transform: translateY(-600px);
+  padding: 1.5rem;
+
+  /* background-color: black; */
+  /* border: 1px solid var(--border-color); */
+  z-index: 1;
 }
 
 #high-score {
