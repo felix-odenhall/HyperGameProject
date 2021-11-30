@@ -19,6 +19,7 @@ export default class StartScene extends Phaser.Scene {
     create() {
         var gameSound = this.sound.add("startAudio");
         // gameSound.loop = true;
+        gameSound.autoplay = true;
         gameSound.play();
         this.add.image(400, 300, "background").setScale(1);
 
