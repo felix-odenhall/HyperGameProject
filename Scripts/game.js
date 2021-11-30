@@ -6,7 +6,6 @@ import gandalfShoot from "../images/gandalf_shoot_sprite.png";
 import darkness from "../images/darkness.png";
 import dead from "../images/dead.mp3";
 
-
 let orcs;
 let positions;
 let spawnTime = 980;
@@ -53,6 +52,7 @@ export default class Game extends Phaser.Scene {
 
     this.load.image("darkness", darkness);
     this.load.audio("dead", dead);
+
   }
 
   create() {
@@ -66,6 +66,7 @@ export default class Game extends Phaser.Scene {
       repeat: 0,
     });
 
+
     this.add.image(400, 300, "background").setScale(1);
 
     positions = {
@@ -75,7 +76,7 @@ export default class Game extends Phaser.Scene {
       rightEdge: this.physics.world.bounds.width,
       bottomEdge: this.physics.world.bounds.height,
       leftEdge: 0,
-    };
+    }
 
     // CURSORS CURSORS CURSORS CURSORS CURSORS CURSORS CURSORS
 
@@ -215,10 +216,13 @@ export default class Game extends Phaser.Scene {
     // GAME OVER
 
     this.physics.add.collider(gameState.gandalf, orcs, () => {
+      
+      // Audio when Gandalf's Dead
       var playerDead = this.sound.add("dead");
-      // gameSound.loop = true;
       playerDead.autoplay = true;
       playerDead.play();
+      
+      //Pauses the Game
       this.physics.pause();
 
       // Checks if this is a new high score.
