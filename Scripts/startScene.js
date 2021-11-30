@@ -1,43 +1,54 @@
 
 import Phaser from "phaser";
 import bg from "../images/background_stone.png";
+import cover from "../images/cover.jpg";
 import darkness from "../images/darkness.png";
+import startAudio from "../images/startAudio.mp3";
 
 export default class StartScene extends Phaser.Scene {
     constructor() {
         super({ key: 'StartScene' })
     }
     preload() {
-        this.load.image("background", bg);
+        this.load.audio("startAudio", startAudio);
+        this.load.image("darkness", darkness);
+        this.load.image("cover", cover);
+
     }
 
     create() {
-
+        var gameSound = this.sound.add("startAudio");
+        // gameSound.loop = true;
+        gameSound.play();
         this.add.image(400, 300, "background").setScale(1);
+
+        this.add.image(400, 300, "cover").setScale(0.6);
+
         // this.add.text(150, 150, 'Click to start', { fill: '#ffffff', fontSize: '60px' });
         // this.add.text(280, 210, 'Game!', { fill: '#ffffff', fontSize: '100px' });
         // this.input.on('pointerdown', () => {
-            // this.scene.stop('StartScene')
-            // this.scene.start('PracticeScene')
+        //     this.scene.stop('StartScene')
+        //     this.scene.start('PracticeScene')
         // })
 
-        const startPractice = this.add.text(100, 100, 'Start Practice', { fill: '#0f0' });
+        const startPractice = this.add.text(100, 200, 'Start Practice', { fill: '#0f0', fontSize: '50px' });
         startPractice.setInteractive();
-        startPractice.on('pointerover', () => startPractice.setColor('#FF00FF') )
-        startPractice.on('pointerout', () => startPractice.setColor('#0f0') )
+        startPractice.on('pointerover', () => startPractice.setColor('#FF00FF'))
+        startPractice.on('pointerout', () => startPractice.setColor('#0f0'))
         startPractice.on('pointerdown', () => {
             this.scene.stop('StartScene')
-            this.scene.start('PracticeScene') });
+            this.scene.start('PracticeScene')
+        });
 
-        const startGame = this.add.text(100, 200, 'Start Game', { fill: '#0f0' });
+        const startGame = this.add.text(100, 300, 'Start Game', { fill: '#0f0', fontSize: '50px' });
         startGame.setInteractive();
-        startGame.on('pointerover', () => startGame.setColor('#FF00FF') )
-        startGame.on('pointerout', () => startGame.setColor('#0f0') )
+        startGame.on('pointerover', () => startGame.setColor('#FF00FF'))
+        startGame.on('pointerout', () => startGame.setColor('#0f0'))
         startGame.on('pointerdown', () => {
             this.scene.stop('StartScene')
-            this.scene.start('Game') });
-  }
-
+            this.scene.start('Game')
+        });
+    }
 }
 
 // var config = {
