@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap");
 :root {
   --border-color: #111;
 }
@@ -17,7 +17,7 @@ body {
   justify-content: center;
   align-items: center;
 
-  background: #111 url('../images/bg.jpg') no-repeat fixed center;
+  background: #111 url("../images/bg.jpg") no-repeat fixed center;
   background-size: cover;
   font-family: Arial, Helvetica, sans-serif;
   color: white;
@@ -31,7 +31,7 @@ canvas {
 h1 {
   margin-bottom: 2rem;
   color: rgb(212, 212, 212);
-  font-family: 'Cinzel Decorative', cursive;
+  font-family: "Cinzel Decorative", cursive;
   font-size: 4rem;
 }
 
@@ -60,7 +60,7 @@ h3 {
 
 #input-form {
   padding: 15px;
-  background-color: #931C22;
+  background-color: #931c22;
 }
 #input-form input {
   padding: 10px;
