@@ -1,4 +1,4 @@
-console.log("GameScene");
+console.log(" Inside PracticeScene");
 import { World } from "matter";
 import Phaser from "phaser";
 import bg from "../images/background_stone.png";
@@ -69,7 +69,7 @@ export default class Game extends Phaser.Scene {
 
     gameState.cursors = this.input.keyboard.createCursorKeys();
     gameState.spacebar = this.input.keyboard.addKey(
-    Phaser.Input.Keyboard.KeyCodes.SPACE
+      Phaser.Input.Keyboard.KeyCodes.SPACE
     );
 
     // ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS
@@ -79,32 +79,32 @@ export default class Game extends Phaser.Scene {
     // GANDALF GANDALF GANDALF GANDALF GANDALF GANDALF GANDALF
 
     gameState.gandalf = this.physics.add
-    .sprite(positions.centerX, positions.centerY, "gandalf")
-    .setCollideWorldBounds(true)
-    .setScale(1.5)
-    .setBodySize(20, 20)
+      .sprite(positions.centerX, positions.centerY, "gandalf")
+      .setCollideWorldBounds(true)
+      .setScale(1.5)
+      .setBodySize(20, 20)
     gameState.gandalf.rotation = -1.56;
 
     this.anims.create({
-			key: 'walk',
-			frames: this.anims.generateFrameNumbers('gandalf', { start: 0, end: 6, }),
-			frameRate: 20,
-			repeat: 0
-		})
+      key: 'walk',
+      frames: this.anims.generateFrameNumbers('gandalf', { start: 0, end: 6, }),
+      frameRate: 20,
+      repeat: 0
+    })
 
     this.anims.create({
-			key: 'idle',
-			frames: [ { key: 'gandalf', frame: 3 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'idle',
+      frames: [{ key: 'gandalf', frame: 3 }],
+      frameRate: 1,
+      repeat: 0
+    })
 
     this.anims.create({
-			key: 'shoot',
-			frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 3, }),
-			frameRate: 20,
-            repeat: 0
-		})
+      key: 'shoot',
+      frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 3, }),
+      frameRate: 20,
+      repeat: 0
+    })
     // this.physics.world.addCollider(orcs, gameState.shot)
 
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
@@ -112,79 +112,79 @@ export default class Game extends Phaser.Scene {
     gameState.arrowUp = this.add.sprite(650, 450, "arrowUp").setDepth(4).setScale(0.6)
 
     this.anims.create({
-			key: 'upGrey',
-			frames: [ { key: 'arrowUp', frame: 0 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'upGrey',
+      frames: [{ key: 'arrowUp', frame: 0 }],
+      frameRate: 1,
+      repeat: 0
+    })
     this.anims.create({
-			key: 'upGreen',
-			frames: [ { key: 'arrowUp', frame: 1 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'upGreen',
+      frames: [{ key: 'arrowUp', frame: 1 }],
+      frameRate: 1,
+      repeat: 0
+    })
 
     gameState.arrowDown = this.add.sprite(650, 500, "arrowDown").setDepth(4).setScale(0.6)
 
     this.anims.create({
-			key: 'downGrey',
-			frames: [ { key: 'arrowDown', frame: 0 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'downGrey',
+      frames: [{ key: 'arrowDown', frame: 0 }],
+      frameRate: 1,
+      repeat: 0
+    })
     this.anims.create({
-			key: 'downGreen',
-			frames: [ { key: 'arrowDown', frame: 1 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'downGreen',
+      frames: [{ key: 'arrowDown', frame: 1 }],
+      frameRate: 1,
+      repeat: 0
+    })
 
     gameState.arrowRight = this.add.sprite(700, 500, "arrowRight").setDepth(4).setScale(0.6)
 
     this.anims.create({
-			key: 'rightGrey',
-			frames: [ { key: 'arrowRight', frame: 0 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'rightGrey',
+      frames: [{ key: 'arrowRight', frame: 0 }],
+      frameRate: 1,
+      repeat: 0
+    })
     this.anims.create({
-			key: 'rightGreen',
-			frames: [ { key: 'arrowRight', frame: 1 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'rightGreen',
+      frames: [{ key: 'arrowRight', frame: 1 }],
+      frameRate: 1,
+      repeat: 0
+    })
 
     gameState.arrowLeft = this.add.sprite(600, 500, "arrowLeft").setDepth(4).setScale(0.6)
 
     this.anims.create({
-			key: 'leftGrey',
-			frames: [ { key: 'arrowLeft', frame: 0 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'leftGrey',
+      frames: [{ key: 'arrowLeft', frame: 0 }],
+      frameRate: 1,
+      repeat: 0
+    })
     this.anims.create({
-			key: 'leftGreen',
-			frames: [ { key: 'arrowLeft', frame: 1 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'leftGreen',
+      frames: [{ key: 'arrowLeft', frame: 1 }],
+      frameRate: 1,
+      repeat: 0
+    })
 
     gameState.spaceKey = this.add.sprite(300, 500, "spaceKey").setDepth(4).setScale(0.6)
 
     this.anims.create({
-			key: 'spaceGrey',
-			frames: [ { key: 'spaceKey', frame: 0 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'spaceGrey',
+      frames: [{ key: 'spaceKey', frame: 0 }],
+      frameRate: 1,
+      repeat: 0
+    })
     this.anims.create({
-			key: 'spaceGreen',
-			frames: [ { key: 'spaceKey', frame: 1 } ],
-			frameRate: 1,
-			repeat: 0
-		})
+      key: 'spaceGreen',
+      frames: [{ key: 'spaceKey', frame: 1 }],
+      frameRate: 1,
+      repeat: 0
+    })
 
-    
+
 
 
     gameState.scoreText = this.add.text(600, 25, `Kills: ${gameState.score}`, {
@@ -212,8 +212,8 @@ export default class Game extends Phaser.Scene {
       gameState.rotation -= 3.5;
       gameState.arrowLeft.anims.play('leftGreen', true)
     }
-      // 🡺 RIGHT: Rotate right
-    
+    // 🡺 RIGHT: Rotate right
+
     else if (gameState.cursors.right.isDown) {
       gameState.rotation += 3.5;
       gameState.arrowRight.anims.play('rightGreen', true)
@@ -280,11 +280,12 @@ export default class Game extends Phaser.Scene {
       this.physics.pause();
       gameState.gameOver = true;
 
-        const startGame = this.add.text(100, 200, 'Start Game', { fill: '#0f0' });
-        startGame.setInteractive();
-        startGame.on('pointerdown', () => {
-            this.scene.stop('PracticeScene')
-            this.scene.start('Game') });
+      const startGame = this.add.text(200, 200, 'Start Game', { fill: '#0f0', fontSize: '50px' });
+      startGame.setInteractive();
+      startGame.on('pointerdown', () => {
+        this.scene.stop('PracticeScene')
+        this.scene.start('Game')
+      });
 
       this.input.on("pointerup", () => {
         this.scene.start('Game');
@@ -302,15 +303,14 @@ export default class Game extends Phaser.Scene {
     this.scene.restart();
   }
 
-  createOrcs()
-  {
-     orcs = this.physics.add.group({
-          key: 'orc',
-          repeat: 2,
-          setXY: { x: 200, y: 50, stepX: 100 },
-          setScale: { x: 0.65, y: 0.65 },
-          immovable: true
-      })
+  createOrcs() {
+    orcs = this.physics.add.group({
+      key: 'orc',
+      repeat: 2,
+      setXY: { x: 200, y: 50, stepX: 100 },
+      setScale: { x: 0.65, y: 0.65 },
+      immovable: true
+    })
   }
 
   createShot() {
@@ -330,23 +330,22 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf.anims.play('shoot', true)
   }
 
-  hitOrcs(orc, shots)
-	{
+  hitOrcs(orc, shots) {
     orc.destroy();
     shots.destroy();
     gameState.score += 1;
     gameState.scoreText.setText(`Kills: ${gameState.score}`);
-	}
+  }
 
-    turnOrcs = function (type) {
-    type.getChildren().forEach(function(item) {
-        let angle = Phaser.Math.RAD_TO_DEG * Phaser.Math.Angle.Between(
-            item.x,
-            item.y,
-            gameState.gandalf.x,
-            gameState.gandalf.y);
-        item.setAngle(angle + 270);
-        })
-    }
+  turnOrcs = function (type) {
+    type.getChildren().forEach(function (item) {
+      let angle = Phaser.Math.RAD_TO_DEG * Phaser.Math.Angle.Between(
+        item.x,
+        item.y,
+        gameState.gandalf.x,
+        gameState.gandalf.y);
+      item.setAngle(angle + 270);
+    })
+  }
 
 }
