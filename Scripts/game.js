@@ -54,7 +54,6 @@ export default class Game extends Phaser.Scene {
 
   create() {
     this.anims.create({
-<<<<<<< HEAD
       key: "shoot",
       frames: this.anims.generateFrameNumbers("gandalfShoot", {
         start: 0,
@@ -63,13 +62,6 @@ export default class Game extends Phaser.Scene {
       frameRate: 20,
       repeat: 0,
     });
-=======
-      key: 'shoot',
-      frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 3, }),
-      frameRate: 20,
-      repeat: 0
-    })
->>>>>>> 8dd2c64e871177c607b8b022debdbfa8ef8160e1
 
     this.add.image(400, 300, "background").setScale(1);
 
@@ -103,7 +95,6 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf.rotation = -1.56;
 
     this.anims.create({
-<<<<<<< HEAD
       key: "shoot",
       frames: this.anims.generateFrameNumbers("gandalfShoot", {
         start: 0,
@@ -119,21 +110,6 @@ export default class Game extends Phaser.Scene {
       frameRate: 20,
       repeat: 0,
     });
-=======
-
-      key: 'shoot',
-      frames: this.anims.generateFrameNumbers('gandalfShoot', { start: 0, end: 3, }),
-      frameRate: 20,
-      repeat: 0
-    })
-
-    this.anims.create({
-      key: 'walk',
-      frames: this.anims.generateFrameNumbers('gandalf', { start: 0, end: 6, }),
-      frameRate: 20,
-      repeat: 0
-    })
->>>>>>> 8dd2c64e871177c607b8b022debdbfa8ef8160e1
 
     this.anims.create({
       key: "idle",
@@ -190,8 +166,8 @@ export default class Game extends Phaser.Scene {
       this.physics.velocityFromRotation(
         gameState.gandalf.rotation,
         gameState.rotationSpeed -
-        gameState.rotationSpeed -
-        gameState.rotationSpeed,
+          gameState.rotationSpeed -
+          gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
 
