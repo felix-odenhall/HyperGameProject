@@ -3,7 +3,7 @@ import bg from "../images/background_stone.png";
 import bg2 from "../images/background_stone2.png";
 import gandalf from "../images/wizzard_sprite2.png";
 import shot from "../images/shot.png";
-import gandalfShoot from "../images/gandalf_shoot_sprite.png";
+import gandalfShoot from "../images/gandalf_shoot_sprite2.png";
 import darkness from "../images/darkness.png";
 import orcSprite from "../images/orc_sprite.png";
 import orcSprite2 from "../images/orc_sprite2.png";
@@ -41,9 +41,9 @@ export default class Game extends Phaser.Scene {
       frameHeight: 48,
     });
 
-    this.load.spritesheet("gandalfShoot", gandalfShoot, {
-      frameWidth: 32,
-      frameHeight: 28,
+    this.load.spritesheet("gandalfShoot", gandalfShoot, { 
+      frameWidth: 48, 
+      frameHeight: 48 
     });
 
     this.load.spritesheet("orc", orcSprite3, {
@@ -69,14 +69,11 @@ export default class Game extends Phaser.Scene {
 
   create() {
     this.anims.create({
-      key: "shoot",
-      frames: this.anims.generateFrameNumbers("gandalfShoot", {
-        start: 0,
-        end: 3,
-      }),
+      key: 'shoot',
+      frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 4, }),
       frameRate: 20,
-      repeat: 0,
-    });
+      repeat: 0
+    })
 
     this.anims.create({
       key: "orcSprite",
