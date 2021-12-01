@@ -11,10 +11,14 @@ import arrowRight from "../images/arrowRight.png";
 import arrowLeft from "../images/arrowLeft.png";
 import spaceKey from "../images/space_key.png";
 import orcSprite from "../images/orc_sprite2.png"
+import magicShot from "../images/magic.wav";
+import practiceMusic from "../images/the-low-whistle.mp3"
+
 
 
 let orcs;
 let positions;
+let practiceSong;
 
 const gameState = {
   gameOver: false,
@@ -53,9 +57,15 @@ export default class Game extends Phaser.Scene {
     );
     this.load.image("background", bg);
 
+    this.load.audio("magicShot", magicShot);
+    this.load.audio("practiceMusic", practiceMusic);
+
   }
 
   create() {
+
+    practiceSong = this.sound.add("practiceMusic");
+    practiceSong.play();
     this.add.image(400, 300, "background").setScale(1);
     this.add.text(10, 540, 'Press the arrow keys to move the Gandalf,', { fill: '#0f0', fontSize: '20px' });
     this.add.text(10, 570, 'Press the SpaceBar to shoot', { fill: '#0f0', fontSize: '20px' });
@@ -206,7 +216,6 @@ export default class Game extends Phaser.Scene {
 
     // GAME OVER: Ends update() execution
     if (gameState.gameOver) {
-      gameState.gandalf.anims.play('idle')
       return;
     }
 
@@ -281,6 +290,7 @@ export default class Game extends Phaser.Scene {
 
     if (gameState.score >= 3) {
       this.physics.pause();
+      practiceSong.stop();
       gameState.gameOver = true;
 
       const startGame = this.add.text(200, 200, 'Start Game', { fill: '#0f0', fontSize: '50px' });
@@ -334,6 +344,9 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf.anims.play("shoot", true);
 
     console.log("hello");
+
+    var magicShot = this.sound.add("magicShot");
+    magicShot.play();
   }
 
   hitOrcs(orc, shots) {

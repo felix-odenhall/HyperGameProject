@@ -10,11 +10,14 @@ import orcSprite2 from "../images/orc_sprite2.png";
 import orcSprite3 from "../images/orc_sprite3.png";
 import dead from "../images/dead.mp3";
 import shoot from "../images/shoot.mp3";
+import magicShot from "../images/magic.wav";
+import battleMusic from "../images/battle.mp3"
 
 let orcs;
 let positions;
 let spawnTime = 980;
 let newOrc;
+let battleSong;
 
 const gameState = {
   gameOver: false,
@@ -65,9 +68,17 @@ export default class Game extends Phaser.Scene {
     this.load.audio("dead", dead);
 
     this.load.audio("shoot", shoot);
+
+    this.load.audio("magicShot", magicShot);
+
+    this.load.audio("battleMusic", battleMusic);
   }
 
   create() {
+
+    battleSong = this.sound.add("battleMusic", {volume: 0.5});
+    battleSong.play()
+
     this.anims.create({
       key: 'shoot',
       frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 4, }),
@@ -165,6 +176,7 @@ export default class Game extends Phaser.Scene {
     // GAME OVER: Ends update() execution
     if (gameState.gameOver) {
       gameState.gandalf.anims.play("idle");
+      battleSong.stop();
       return;
     }
 
@@ -297,6 +309,9 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf.anims.play("shoot", true);
 
     console.log("hello");
+
+    var magicShot = this.sound.add("magicShot");
+    magicShot.play();
   }
 
   // ADDING ORCS
