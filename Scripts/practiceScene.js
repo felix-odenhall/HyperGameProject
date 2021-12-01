@@ -2,14 +2,15 @@ console.log(" Inside PracticeScene");
 import { World } from "matter";
 import Phaser from "phaser";
 import bg from "../images/background_stone.png";
-import gandalf from "../images/wizzard_sprite.png";
+import gandalf from "../images/wizzard_sprite2.png";
 import shot from "../images/shot.png";
-import gandalfShoot from "../images/gandalf_shoot_sprite.png";
+import gandalfShoot from "../images/gandalf_shoot_sprite2.png";
 import arrowUp from "../images/arrowup.png";
 import arrowDown from "../images/arrowDown.png";
 import arrowRight from "../images/arrowRight.png";
 import arrowLeft from "../images/arrowLeft.png";
 import spaceKey from "../images/space_key.png";
+import orcSprite from "../images/orc_sprite2.png"
 
 
 let orcs;
@@ -31,13 +32,14 @@ export default class Game extends Phaser.Scene {
     super({ key: 'PracticeScene' })
   }
   preload() {
-    this.load.image(
-      "orc", // ORC
-      "https://content.codecademy.com/courses/learn-phaser/physics/bug_1.png"
-    );
-    this.load.spritesheet("gandalf", gandalf, { frameWidth: 32, frameHeight: 28 });
+    // this.load.image(
+    //   "orc", // ORC
+    //   orcSprite
+    // );
+    this.load.spritesheet("gandalf", gandalf, { frameWidth: 48, frameHeight: 48 });
+    this.load.spritesheet("orc", orcSprite, { frameWidth: 48, frameHeight: 48 });
 
-    this.load.spritesheet("gandalfShoot", gandalfShoot, { frameWidth: 32, frameHeight: 28 });
+    this.load.spritesheet("gandalfShoot", gandalfShoot, { frameWidth: 48, frameHeight: 48 });
 
     this.load.spritesheet("arrowUp", arrowUp, { frameWidth: 96, frameHeight: 96 });
     this.load.spritesheet("arrowDown", arrowDown, { frameWidth: 96, frameHeight: 96 });
@@ -82,14 +84,14 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf = this.physics.add
       .sprite(positions.centerX, positions.centerY, "gandalf")
       .setCollideWorldBounds(true)
-      .setScale(1.5)
+      .setScale(1)
       .setBodySize(20, 20)
     gameState.gandalf.rotation = -1.56;
 
     this.anims.create({
       key: 'walk',
       frames: this.anims.generateFrameNumbers('gandalf', { start: 0, end: 6, }),
-      frameRate: 20,
+      frameRate: 12,
       repeat: 0
     })
 
@@ -102,7 +104,7 @@ export default class Game extends Phaser.Scene {
 
     this.anims.create({
       key: 'shoot',
-      frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 3, }),
+      frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 4, }),
       frameRate: 20,
       repeat: 0
     })
@@ -309,7 +311,7 @@ export default class Game extends Phaser.Scene {
       key: 'orc',
       repeat: 2,
       setXY: { x: 200, y: 50, stepX: 100 },
-      setScale: { x: 0.65, y: 0.65 },
+      setScale: { x: 0.8, y: 0.8 },
       immovable: true
     })
   }
@@ -326,9 +328,12 @@ export default class Game extends Phaser.Scene {
       "shot"
     );
     // SHOT MOVEMENT DIRECTION
-    gameState.shot.setVelocity(x, y)
 
-    gameState.gandalf.anims.play('shoot', true)
+    gameState.shot.setVelocity(x, y);
+
+    gameState.gandalf.anims.play("shoot", true);
+
+    console.log("hello");
   }
 
   hitOrcs(orc, shots) {
