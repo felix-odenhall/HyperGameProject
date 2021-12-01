@@ -1,10 +1,13 @@
 import Phaser from "phaser";
 import bg from "../images/background_stone.png";
-import gandalf from "../images/wizzard_sprite.png";
+import bg2 from "../images/background_stone2.png";
+import gandalf from "../images/wizzard_sprite2.png";
 import shot from "../images/shot.png";
 import gandalfShoot from "../images/gandalf_shoot_sprite.png";
 import darkness from "../images/darkness.png";
 import orcSprite from "../images/orc_sprite.png";
+import orcSprite2 from "../images/orc_sprite2.png";
+import orcSprite3 from "../images/orc_sprite3.png";
 import dead from "../images/dead.mp3";
 import shoot from "../images/shoot.mp3";
 
@@ -34,8 +37,8 @@ export default class Game extends Phaser.Scene {
     //   "https://content.codecademy.com/courses/learn-phaser/physics/bug_1.png"
     // );
     this.load.spritesheet("gandalf", gandalf, {
-      frameWidth: 32,
-      frameHeight: 28,
+      frameWidth: 48,
+      frameHeight: 48,
     });
 
     this.load.spritesheet("gandalfShoot", gandalfShoot, {
@@ -43,7 +46,7 @@ export default class Game extends Phaser.Scene {
       frameHeight: 28,
     });
 
-    this.load.spritesheet("orc", orcSprite, {
+    this.load.spritesheet("orc", orcSprite3, {
       frameWidth: 48,
       frameHeight: 48,
     });
@@ -55,7 +58,7 @@ export default class Game extends Phaser.Scene {
       "shot", // SHOT
       shot
     );
-    this.load.image("background", bg);
+    this.load.image("background", bg2);
 
     this.load.image("darkness", darkness);
 
@@ -110,8 +113,8 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf = this.physics.add
       .sprite(positions.centerX, positions.centerY, "gandalf")
       .setCollideWorldBounds(true)
-      .setScale(1.5)
-      .setBodySize(20, 20);
+      .setScale(1)
+      .setBodySize(30, 30);
     gameState.gandalf.rotation = -1.56;
 
     this.anims.create({
@@ -127,7 +130,7 @@ export default class Game extends Phaser.Scene {
     this.anims.create({
       key: "walk",
       frames: this.anims.generateFrameNumbers("gandalf", { start: 0, end: 6 }),
-      frameRate: 20,
+      frameRate: 12,
       repeat: 0,
     });
 
@@ -309,8 +312,8 @@ export default class Game extends Phaser.Scene {
           positions.topEdge - 20
         )
         .setScale(0.8)
-        .anims.play("orcSprite", true);
-      // newOrc.anims.play('orcSprite')
+        .anims.play("orcSprite", true)
+        .setBodySize(30, 30);
     } else if (randomDirection == 1) {
       orcs
         .create(
@@ -318,8 +321,8 @@ export default class Game extends Phaser.Scene {
           Math.floor(Math.random() * positions.bottomEdge)
         )
         .setScale(0.8)
-        .anims.play("orcSprite", true);
-      // newOrc.anims.play('orcSprite')
+        .anims.play("orcSprite", true)
+        .setBodySize(30, 30);
     } else if (randomDirection == 2) {
       orcs
         .create(
@@ -327,8 +330,8 @@ export default class Game extends Phaser.Scene {
           positions.bottomEdge + 20
         )
         .setScale(0.8)
-        .anims.play("orcSprite"),
-        true;
+        .anims.play("orcSprite", true)
+        .setBodySize(30, 30);
       // newOrc.anims.play('orcSprite')
     } else if (randomDirection == 3) {
       orcs
@@ -337,7 +340,8 @@ export default class Game extends Phaser.Scene {
           Math.floor(Math.random() * positions.bottomEdge)
         )
         .setScale(0.8)
-        .anims.play("orcSprite", true);
+        .anims.play("orcSprite", true)
+        .setBodySize(35, 35);
 
       // newOrc.anims.play('orcSprite')
     }
