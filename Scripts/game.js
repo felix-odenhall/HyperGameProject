@@ -4,7 +4,9 @@ import gandalf from "../images/wizzard_sprite.png";
 import shot from "../images/shot.png";
 import gandalfShoot from "../images/gandalf_shoot_sprite.png";
 import darkness from "../images/darkness.png";
-import orcSprite from "../images/orc_sprite.png"
+import orcSprite from "../images/orc_sprite.png";
+import dead from "../images/dead.mp3";
+import shoot from "../images/shoot.mp3";
 
 let orcs;
 let positions;
@@ -50,6 +52,10 @@ export default class Game extends Phaser.Scene {
     this.load.image("background", bg);
 
     this.load.image("darkness", darkness);
+
+    this.load.audio("dead", dead);
+
+    this.load.audio("shoot", shoot);
   }
 
   create() {
@@ -198,6 +204,7 @@ export default class Game extends Phaser.Scene {
     // SHOT ORC COLLIDER
 
     this.physics.add.collider([orcs], gameState.shot, this.hitOrcs, null, this);
+
     // this.physics.add.overlap(orcs, gameState.shot, function (shots, orc) {
     //   orc.destroy();
     //   shots.destroy();
@@ -226,9 +233,13 @@ export default class Game extends Phaser.Scene {
     // GAME OVER
 
     this.physics.add.collider(gameState.gandalf, orcs, () => {
+      // Audio for StartScene
+      var playerDead = this.sound.add("dead");
+      playerDead.autoplay = true;
+      playerDead.play();
       this.physics.pause();
-      gameState.gameOver = true;
 
+      gameState.gameOver = true;
       // Checks if this is a new high score
       this.addToHighScore(gameState.score);
 
@@ -238,13 +249,15 @@ export default class Game extends Phaser.Scene {
           fill: "#ffffff",
         })
         .setOrigin(0.5, 0.5);
-
+      this.orcs.anims.stop();
       this.input.on("pointerup", () => {
         var highScoreList = document.getElementById("high-score");
         if (document.getElementById("high-score")) {
           highScoreList.parentNode.removeChild(highScoreList);
+
         }
         this.restartGame();
+
       });
       return;
     });
@@ -299,7 +312,7 @@ export default class Game extends Phaser.Scene {
         )
         .setScale(0.8)
         .anims.play("orcSprite", true);
-        // newOrc.anims.play('orcSprite')
+      // newOrc.anims.play('orcSprite')
     } else if (randomDirection == 1) {
       orcs
         .create(
@@ -308,7 +321,7 @@ export default class Game extends Phaser.Scene {
         )
         .setScale(0.8)
         .anims.play("orcSprite", true);
-        // newOrc.anims.play('orcSprite')
+      // newOrc.anims.play('orcSprite')
     } else if (randomDirection == 2) {
       orcs
         .create(
@@ -317,7 +330,7 @@ export default class Game extends Phaser.Scene {
         )
         .setScale(0.8)
         .anims.play("orcSprite"), true;
-        // newOrc.anims.play('orcSprite')
+      // newOrc.anims.play('orcSprite')
     } else if (randomDirection == 3) {
       orcs
         .create(
@@ -327,7 +340,7 @@ export default class Game extends Phaser.Scene {
         .setScale(0.8)
         .anims.play("orcSprite", true);
 
-        // newOrc.anims.play('orcSprite')
+      // newOrc.anims.play('orcSprite')
     }
   }
 
@@ -346,7 +359,9 @@ export default class Game extends Phaser.Scene {
     shots.destroy();
     gameState.score += 1;
     gameState.scoreText.setText(`Kills: ${gameState.score}`);
-
+    
+    var orcShoot = this.sound.add("shoot");
+    orcShoot.play();
   }
 
   turnOrcs = function (type) {
