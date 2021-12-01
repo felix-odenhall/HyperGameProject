@@ -69,9 +69,16 @@ export default class Game extends Phaser.Scene {
 
     this.load.audio("shoot", shoot);
 
+
     this.load.audio("magicShot", magicShot);
 
     this.load.audio("battleMusic", battleMusic);
+
+    // If a high score is stored in localStorage, it will replace the gameState.highScore array.
+    if (localStorage.getItem("highScores")) {
+      gameState.highScore = JSON.parse(localStorage.getItem("highScores"));
+    }
+
   }
 
   create() {
@@ -269,6 +276,11 @@ export default class Game extends Phaser.Scene {
         document.querySelector("h1").setAttribute("style", "color: inherit");
         document.querySelector("h1").innerText = "Name of the Game";
         document.querySelector("h3").remove();
+
+        // Updates the high score board, if a high score has ever been saved.
+        if (localStorage.getItem("highScores")) {
+          gameState.highScores = JSON.parse(localStorage.getItem("highScores"));
+        }
         this.restartGame();
       });
       return;
@@ -305,13 +317,11 @@ export default class Game extends Phaser.Scene {
     // SHOT MOVEMENT DIRECTION
 
     gameState.shot.setVelocity(x, y);
-
     gameState.gandalf.anims.play("shoot", true);
-
-    console.log("hello");
 
     var magicShot = this.sound.add("magicShot");
     magicShot.play();
+
   }
 
   // ADDING ORCS
@@ -395,7 +405,6 @@ export default class Game extends Phaser.Scene {
 
   addToHighScore = function (score) {
     const min = Math.min(...gameState.highScore);
-    console.log(min);
 
     if (score > min) {
       gameState.highScore.sort(function (a, b) {
@@ -424,6 +433,8 @@ export default class Game extends Phaser.Scene {
         ol.appendChild(li);
         console.log("Done");
       }
+      // Makes a string of the sorted high score array and saves it in localStorage
+      localStorage.setItem("highScores", JSON.stringify(sortedHighScore));
     }
     return;
   };
