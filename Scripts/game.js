@@ -38,9 +38,15 @@ export default class Game extends Phaser.Scene {
       frameHeight: 28,
     });
 
-    this.load.spritesheet("gandalfShoot", gandalfShoot, { frameWidth: 32, frameHeight: 28 });
+    this.load.spritesheet("gandalfShoot", gandalfShoot, {
+      frameWidth: 32,
+      frameHeight: 28,
+    });
 
-    this.load.spritesheet("orc", orcSprite, { frameWidth: 48, frameHeight: 48 });
+    this.load.spritesheet("orc", orcSprite, {
+      frameWidth: 48,
+      frameHeight: 48,
+    });
     // this.load.image(
     //   "gandalf", // GANDALF
     //   "https://content.codecademy.com/courses/learn-phaser/physics/codey.png"
@@ -59,21 +65,22 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-
-
     this.anims.create({
-      key: 'shoot',
-      frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 3, }),
+      key: "shoot",
+      frames: this.anims.generateFrameNumbers("gandalfShoot", {
+        start: 0,
+        end: 3,
+      }),
       frameRate: 20,
-      repeat: 0
-    })
+      repeat: 0,
+    });
 
     this.anims.create({
-      key: 'orcSprite',
-      frames: this.anims.generateFrameNumbers("orc", { start: 0, end: 3, }),
+      key: "orcSprite",
+      frames: this.anims.generateFrameNumbers("orc", { start: 0, end: 3 }),
       frameRate: 12,
-      repeat: -1
-    })
+      repeat: -1,
+    });
 
     this.add.image(400, 300, "background").setScale(1);
     console.log(bg);
@@ -108,19 +115,21 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf.rotation = -1.56;
 
     this.anims.create({
-
-      key: 'shoot',
-      frames: this.anims.generateFrameNumbers('gandalfShoot', { start: 0, end: 3, }),
+      key: "shoot",
+      frames: this.anims.generateFrameNumbers("gandalfShoot", {
+        start: 0,
+        end: 3,
+      }),
       frameRate: 20,
-      repeat: 0
-    })
+      repeat: 0,
+    });
 
     this.anims.create({
-      key: 'walk',
-      frames: this.anims.generateFrameNumbers('gandalf', { start: 0, end: 6, }),
+      key: "walk",
+      frames: this.anims.generateFrameNumbers("gandalf", { start: 0, end: 6 }),
       frameRate: 20,
-      repeat: 0
-    })
+      repeat: 0,
+    });
 
     this.anims.create({
       key: "idle",
@@ -138,12 +147,16 @@ export default class Game extends Phaser.Scene {
 
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
 
-    gameState.scoreText = this.add
-      .text(600, 25, `Kills: ${gameState.score}`, {
-        fontSize: "32px",
-        fill: "#FFF",
-      })
-      .setDepth(4);
+    let h3 = document.createElement("h3");
+    h3.innerHTML = `Kills: ${gameState.score}`;
+    document.body.appendChild(h3);
+
+    // gameState.scoreText = this.add
+    //   .text(600, 25, `Kills: ${gameState.score}`, {
+    //     fontSize: "32px",
+    //     fill: "#FFF",
+    //   })
+    //   .setDepth(4);
   }
 
   update() {
@@ -172,28 +185,24 @@ export default class Game extends Phaser.Scene {
         gameState.gandalf.body.velocity
       );
 
-      gameState.gandalf.anims.play('walk', true)
-
-
+      gameState.gandalf.anims.play("walk", true);
 
       // 🡻 DOWN: Move backwards
     } else if (gameState.cursors.down.isDown) {
       this.physics.velocityFromRotation(
         gameState.gandalf.rotation,
         gameState.rotationSpeed -
-        gameState.rotationSpeed -
-        gameState.rotationSpeed,
+          gameState.rotationSpeed -
+          gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
 
-      gameState.gandalf.anims.play('walk', true)
-
+      gameState.gandalf.anims.play("walk", true);
 
       // NO KEY: Stop movement
     } else {
       gameState.gandalf.setAcceleration(0);
       gameState.gandalf.setVelocity(0);
-
     }
 
     // [  SPACE  ]: Shoot
@@ -204,13 +213,6 @@ export default class Game extends Phaser.Scene {
     // SHOT ORC COLLIDER
 
     this.physics.add.collider([orcs], gameState.shot, this.hitOrcs, null, this);
-
-    // this.physics.add.overlap(orcs, gameState.shot, function (shots, orc) {
-    //   orc.destroy();
-    //   shots.destroy();
-    //   gameState.score += 1;
-    //   gameState.scoreText.setText(`Kills: ${gameState.score}`);
-    // });
 
     // YOU WIN
 
@@ -243,21 +245,19 @@ export default class Game extends Phaser.Scene {
       // Checks if this is a new high score
       this.addToHighScore(gameState.score);
 
-      this.add
-        .text(positions.centerX, positions.centerY, "GAME OVER", {
-          fontSize: "120px",
-          fill: "#ffffff",
-        })
-        .setOrigin(0.5, 0.5);
-      this.orcs.anims.stop();
+      document.querySelector("h1").setAttribute("style", "color: tomato");
+      document.querySelector("h1").innerText = "Game Over";
+
+      // this.orcs.anims.stop();
       this.input.on("pointerup", () => {
         var highScoreList = document.getElementById("high-score");
         if (document.getElementById("high-score")) {
           highScoreList.parentNode.removeChild(highScoreList);
-
         }
+        document.querySelector("h1").setAttribute("style", "color: inherit");
+        document.querySelector("h1").innerText = "Name of the Game";
+        document.querySelector("h3").remove();
         this.restartGame();
-
       });
       return;
     });
@@ -269,9 +269,8 @@ export default class Game extends Phaser.Scene {
       spawnTime -= gameState.speedBoost / 10;
       gameState.gandalfSpeed += gameState.speedBoost / gameState.gandalfBoost;
     }
-    this.orcDirection()
+    this.orcDirection();
     this.turnOrcs(orcs);
-
   }
 
   restartGame() {
@@ -293,12 +292,11 @@ export default class Game extends Phaser.Scene {
     );
     // SHOT MOVEMENT DIRECTION
 
-    gameState.shot.setVelocity(x, y)
+    gameState.shot.setVelocity(x, y);
 
-    gameState.gandalf.anims.play('shoot', true)
+    gameState.gandalf.anims.play("shoot", true);
 
-    console.log("hello")
-
+    console.log("hello");
   }
 
   // ADDING ORCS
@@ -308,7 +306,7 @@ export default class Game extends Phaser.Scene {
       orcs
         .create(
           Math.floor(Math.random() * positions.rightEdge),
-          positions.topEdge - 20,
+          positions.topEdge - 20
         )
         .setScale(0.8)
         .anims.play("orcSprite", true);
@@ -317,7 +315,7 @@ export default class Game extends Phaser.Scene {
       orcs
         .create(
           positions.rightEdge + 20,
-          Math.floor(Math.random() * positions.bottomEdge),
+          Math.floor(Math.random() * positions.bottomEdge)
         )
         .setScale(0.8)
         .anims.play("orcSprite", true);
@@ -326,16 +324,17 @@ export default class Game extends Phaser.Scene {
       orcs
         .create(
           Math.floor(Math.random() * positions.rightEdge),
-          positions.bottomEdge + 20,
+          positions.bottomEdge + 20
         )
         .setScale(0.8)
-        .anims.play("orcSprite"), true;
+        .anims.play("orcSprite"),
+        true;
       // newOrc.anims.play('orcSprite')
     } else if (randomDirection == 3) {
       orcs
         .create(
           positions.leftEdge - 20,
-          Math.floor(Math.random() * positions.bottomEdge),
+          Math.floor(Math.random() * positions.bottomEdge)
         )
         .setScale(0.8)
         .anims.play("orcSprite", true);
@@ -358,8 +357,8 @@ export default class Game extends Phaser.Scene {
     orc.destroy();
     shots.destroy();
     gameState.score += 1;
-    gameState.scoreText.setText(`Kills: ${gameState.score}`);
-    
+    document.querySelector("h3").innerHTML = `Kills: ${gameState.score}`;
+
     var orcShoot = this.sound.add("shoot");
     orcShoot.play();
   }
