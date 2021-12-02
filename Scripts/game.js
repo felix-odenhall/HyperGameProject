@@ -12,12 +12,15 @@ import dead from "../images/dead.mp3";
 import shoot from "../images/shoot.mp3";
 import magicShot from "../images/magic.wav";
 import battleMusic from "../images/battle.mp3"
+import metalMusic from "../images/metal.mp3"
 
 let orcs;
 let positions;
 let spawnTime = 980;
 let newOrc;
 let battleSong;
+let shadows;
+let metalSong;
 
 const gameState = {
   gameOver: false,
@@ -61,6 +64,8 @@ export default class Game extends Phaser.Scene {
     this.load.audio("dead", dead);
 
     this.load.audio("shoot", shoot);
+
+    this.load.audio("metalMusic", metalMusic);
 
 
     this.load.audio("magicShot", magicShot);
@@ -157,7 +162,7 @@ export default class Game extends Phaser.Scene {
 
     console.log(gameState.gandalf);
 
-    this.add.image(400, 300, "darkness").setDepth(3);
+    shadows = this.add.image(400, 300, "darkness").setDepth(3);
 
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
 
@@ -198,6 +203,18 @@ export default class Game extends Phaser.Scene {
         //   battleSong.resume();
         //   gameState.score += 5000;
         //     break;
+        case "i hate darkness":
+          shadows.destroy()
+          this.physics.resume();
+          battleSong.resume();
+          break;
+
+        // case "metal":
+        //   this.physics.resume();
+        //   metalSong = this.sound.add("metalMusic")
+        //   battleSong.stop()
+        //   metalSong.play()
+        //   break;
       }
 } 
 
@@ -207,7 +224,7 @@ export default class Game extends Phaser.Scene {
     // GAME OVER: Ends update() execution
     if (gameState.gameOver) {
       gameState.gandalf.anims.play("idle");
-      battleSong.stop();
+      battleSong.stop()
       return;
     }
 
