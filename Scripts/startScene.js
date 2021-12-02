@@ -6,6 +6,7 @@ import darkness from "../images/darkness.png";
 import startAudio from "../images/startAudio.mp3";
 import startBtn from "../images/startBtn.png";
 import practiceBtn from "../images/practiceBtn.png";
+import duosBtn from "../images/duosBtn.png"
 
 export default class StartScene extends Phaser.Scene {
     constructor() {
@@ -17,7 +18,7 @@ export default class StartScene extends Phaser.Scene {
         this.load.image("cover", cover);
         this.load.spritesheet("startBtn", startBtn, { frameWidth: 500, frameHeight: 160 });
         this.load.spritesheet("practiceBtn", practiceBtn, { frameWidth: 500, frameHeight: 160 });
-
+        this.load.spritesheet("duosBtn", duosBtn, { frameWidth: 500, frameHeight: 160 });
     }
 
     create() {
@@ -68,6 +69,27 @@ export default class StartScene extends Phaser.Scene {
             repeat: 0
         })
 
+        this.anims.create({
+            key: 'duosBtnOut',
+            frames: [{ key: 'duosBtn', frame: 0 }],
+            frameRate: 1,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'duosBtnHover',
+            frames: [{ key: 'duosBtn', frame: 1 }],
+            frameRate: 1,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'duosBtnClick',
+            frames: [{ key: 'duosBtn', frame: 2 }],
+            frameRate: 1,
+            repeat: 0
+        })
+
         this.add.image(400, 300, "background").setScale(1);
         this.add.image(400, 300, "cover").setScale(0.6);
 
@@ -94,5 +116,15 @@ export default class StartScene extends Phaser.Scene {
             this.scene.stop('StartScene')
             this.scene.start('Game')
         });
+
+        const startDuos = this.add.sprite(400, 450, "duosBtn").setScale(0.5);
+        startDuos.setInteractive();
+        startDuos.on('pointerover', () => startDuos.anims.play('duosBtnHover', true))
+        startDuos.on('pointerout', () => startDuos.anims.play('duosBtnOut', true))
+        startDuos.on('pointerdown', () => {
+            startDuos.anims.play('duosBtnClick', true)
+            this.scene.stop('StartScene')
+            this.scene.start('GameTwoPlayers')
+        });
     }
-}
+} 

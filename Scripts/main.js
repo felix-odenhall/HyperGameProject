@@ -2,13 +2,14 @@ import Phaser from "phaser";
 import StartScene from "./startScene";
 import Game from "./game";
 import PracticeScene from "./practiceScene";
+import GameTwoPlayers from "./gameTwoPlayer"
 
 var config = {
   type: Phaser.AUTO,
   width: 800,
   height: 600,
-  backgroundColor: "#4488aa",
-  scene: [StartScene, PracticeScene, Game],
+  backgroundColor: "#000000",
+  scene: [StartScene, PracticeScene, Game, GameTwoPlayers],
   physics: {
     default: "arcade",
     arcade: {
