@@ -247,8 +247,8 @@ export default class Game extends Phaser.Scene {
       this.physics.velocityFromRotation(
         gameState.gandalf.rotation,
         gameState.rotationSpeed -
-          gameState.rotationSpeed -
-          gameState.rotationSpeed,
+        gameState.rotationSpeed -
+        gameState.rotationSpeed,
         gameState.gandalf.body.velocity
       );
 
@@ -474,7 +474,7 @@ export default class Game extends Phaser.Scene {
   addToHighScore = function (score) {
     // If the new score is higher than the 5th (lowest) highscore.
     if (score > gameState.highScore[4].score) {
-      var username = prompt("");
+      var username = prompt("Enter Player Name");
       // Removes the last (lowest entry) object in the array.
       gameState.highScore.pop();
       // Adds the new score and username in the end of the high score array.
