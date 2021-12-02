@@ -13,6 +13,8 @@ import spaceKey from "../images/space_key.png";
 import orcSprite from "../images/orc_sprite2.png"
 import magicShot from "../images/magic.wav";
 import practiceMusic from "../images/the-low-whistle.mp3"
+import dummyHit from "../images/slimejump.mp3"
+import shoot from "../images/shoot.mp3";
 
 
 
@@ -58,7 +60,9 @@ export default class Game extends Phaser.Scene {
     this.load.image("background", bg);
 
     this.load.audio("magicShot", magicShot);
+    this.load.audio("dummyHit", dummyHit);
     this.load.audio("practiceMusic", practiceMusic);
+    this.load.audio("shoot", shoot);
 
   }
 
@@ -347,7 +351,7 @@ export default class Game extends Phaser.Scene {
 
     console.log("hello");
 
-    var magicShot = this.sound.add("magicShot");
+    var magicShot = this.sound.add("magicShot", { volume: 0.6});
     magicShot.play();
 
   }
@@ -357,6 +361,10 @@ export default class Game extends Phaser.Scene {
     shots.destroy();
     gameState.score += 1;
     gameState.scoreText.setText(`Kills: ${gameState.score}`);
+    var hitDummy = this.sound.add("dummyHit", { detune: - 300 });
+    hitDummy.play();
+    var orcShoot = this.sound.add("shoot", {volume: 0.2} );
+    orcShoot.play();
   }
 
   turnOrcs = function (type) {

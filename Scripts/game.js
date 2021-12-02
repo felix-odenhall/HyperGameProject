@@ -13,6 +13,7 @@ import shoot from "../images/shoot.mp3";
 import magicShot from "../images/magic.wav";
 import battleMusic from "../images/battle.mp3";
 import metalMusic from "../images/metal.mp3";
+import dummyHit from "../images/slimejump.mp3"
 
 // Added this for async function
 import 'regenerator-runtime/runtime'
@@ -98,6 +99,7 @@ export default class Game extends Phaser.Scene {
     this.load.audio("metalMusic", metalMusic);
     this.load.audio("magicShot", magicShot);
     this.load.audio("battleMusic", battleMusic);
+    this.load.audio("dummyHit", dummyHit);
 
     // If a high score is stored in localStorage, it will replace the gameState.highScore array.
     if (localStorage.getItem("highScores")) {
@@ -202,12 +204,8 @@ export default class Game extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(gameState.enter)) {
       battleSong.pause();
       this.physics.pause();
-      var cheat = prompt("");
+      var cheat = prompt("So, you want to cheat... Go on then...");
       switch (cheat) {
-        case "":
-          this.physics.resume();
-          battleSong.resume();
-          break;
         case "robin hood":
           this.physics.resume();
           battleSong.resume();
@@ -224,23 +222,15 @@ export default class Game extends Phaser.Scene {
           battleSong.resume();
           localStorage.clear();
           break;
-        // case "i r winner":
-        //   this.physics.resume();
-        //   battleSong.resume();
-        //   gameState.score += 5000;
-        //     break;
         case "i hate darkness":
           shadows.destroy();
           this.physics.resume();
           battleSong.resume();
           break;
-
-        // case "metal":
-        //   this.physics.resume();
-        //   metalSong = this.sound.add("metalMusic")
-        //   battleSong.stop()
-        //   metalSong.play()
-        //   break;
+        default:
+          this.physics.resume();
+          battleSong.resume();
+          break;
       }
     }
 
@@ -248,7 +238,6 @@ export default class Game extends Phaser.Scene {
 
     // GAME OVER: Ends update() execution
     if (gameState.gameOver) {
-      gameState.gandalf.anims.play("idle");
       battleSong.stop();
       return;
     }
@@ -278,7 +267,7 @@ export default class Game extends Phaser.Scene {
         gameState.gandalf.rotation,
         gameState.rotationSpeed -
         gameState.rotationSpeed -
-        gameState.rotationSpeed,
+        gameState.rotationSpeed / 2,
         gameState.gandalf.body.velocity
       );
 
@@ -390,7 +379,7 @@ export default class Game extends Phaser.Scene {
     gameState.shot.setVelocity(x, y);
     gameState.gandalf.anims.play("shoot", true);
 
-    var magicShot = this.sound.add("magicShot");
+    var magicShot = this.sound.add("magicShot", { volume: 0.6});
     if (gameState.score > 0) {
       gameState.score -= 1;
     }
@@ -469,7 +458,9 @@ export default class Game extends Phaser.Scene {
     gameState.score += 3;
     document.querySelector("h3").innerHTML = `Score: ${gameState.score}`;
 
-    var orcShoot = this.sound.add("shoot");
+    var hitDummy = this.sound.add("dummyHit", { detune: - 300 });
+    hitDummy.play();
+    var orcShoot = this.sound.add("shoot", {volume: 0.4} );
     orcShoot.play();
   }
 
