@@ -2,8 +2,10 @@ import Phaser from "phaser";
 import bg from "../images/background_stone.png";
 import bg2 from "../images/background_stone2.png";
 import gandalf from "../images/wizzard_sprite2.png";
+import gandalfp2 from "../images/wizzard_sprite2p2.png";
 import shot from "../images/shot.png";
 import gandalfShoot from "../images/gandalf_shoot_sprite2.png";
+import gandalfShootp2 from "../images/gandalf_shoot_sprite2p2.png";
 import darkness from "../images/darkness.png";
 import orcSprite from "../images/orc_sprite.png";
 import orcSprite2 from "../images/orc_sprite2.png";
@@ -13,6 +15,7 @@ import shoot from "../images/shoot.mp3";
 import magicShot from "../images/magic.wav";
 import battleMusic from "../images/battle.mp3"
 import metalMusic from "../images/metal.mp3"
+import dummyHit from "../images/slimejump.mp3"
 
 let orcs;
 let positions;
@@ -51,6 +54,16 @@ export default class GameTwoPlayers extends Phaser.Scene {
       frameHeight: 48 
     });
 
+    this.load.spritesheet("gandalfp2", gandalfp2, {
+      frameWidth: 48,
+      frameHeight: 48,
+    });
+
+    this.load.spritesheet("gandalfShootp2", gandalfShootp2, { 
+      frameWidth: 48, 
+      frameHeight: 48 
+    });
+
     this.load.spritesheet("orc", orcSprite2, {
       frameWidth: 48,
       frameHeight: 48,
@@ -68,7 +81,8 @@ export default class GameTwoPlayers extends Phaser.Scene {
 
     this.load.audio("shoot", shoot);
 
-    // this.load.audio("metalMusic", metalMusic);
+    this.load.audio("dummyHit", dummyHit);
+
 
 
     this.load.audio("magicShot", magicShot);
@@ -84,8 +98,15 @@ export default class GameTwoPlayers extends Phaser.Scene {
 
   create() {
 
-    battleSong = this.sound.add("battleMusic", {volume: 0.6});
+    battleSong = this.sound.add("battleMusic", {volume: 0.2});
     battleSong.play()
+
+    this.anims.create({
+      key: "walk",
+      frames: this.anims.generateFrameNumbers("gandalf", { start: 0, end: 6 }),
+      frameRate: 12,
+      repeat: 0,
+    });
 
     this.anims.create({
       key: 'shoot',
@@ -152,15 +173,15 @@ export default class GameTwoPlayers extends Phaser.Scene {
     gameState.gandalf.rotation = -1.56;
 
     gameState.player2 = this.physics.add
-    .sprite(positions.centerX - 200, positions.centerY, "gandalf")
+    .sprite(positions.centerX - 200, positions.centerY, "gandalfp2")
     .setCollideWorldBounds(true)
     .setScale(1)
     .setBodySize(30, 30);
   gameState.gandalf.rotation2 = -1.56;
 
     this.anims.create({
-      key: "shoot",
-      frames: this.anims.generateFrameNumbers("gandalfShoot", {
+      key: "shootp2",
+      frames: this.anims.generateFrameNumbers("gandalfShootp2", {
         start: 0,
         end: 3,
       }),
@@ -169,21 +190,23 @@ export default class GameTwoPlayers extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: "walk",
-      frames: this.anims.generateFrameNumbers("gandalf", { start: 0, end: 6 }),
+      key: "walkp2",
+      frames: this.anims.generateFrameNumbers("gandalfp2", { start: 0, end: 6 }),
       frameRate: 12,
       repeat: 0,
     });
 
     this.anims.create({
-      key: "idle",
-      frames: this.anims.generateFrameNumbers("gandalf", { frame: 4 }),
+      key: "idlep2",
+      frames: this.anims.generateFrameNumbers("gandalfp2", { frame: 4 }),
       frameRate: 1,
       repeat: 0,
     });
     // this.physics.world.addCollider(orcs, gameState.shot)
 
     this.physics.add.collider(orcs, orcs);
+
+    this.physics.add.collider(gameState.gandalf, gameState.player2);
 
     console.log(gameState.gandalf);
 
@@ -203,7 +226,6 @@ export default class GameTwoPlayers extends Phaser.Scene {
 
     // GAME OVER: Ends update() execution
     if (gameState.gameOver) {
-      gameState.gandalf.anims.play("idle");
       battleSong.stop()
       return;
     }
@@ -271,7 +293,7 @@ export default class GameTwoPlayers extends Phaser.Scene {
             gameState.player2.body.velocity
           );
     
-          gameState.gandalf.anims.play("walk", true);
+          gameState.player2.anims.play("walkp2", true);
     
           // 🡻 DOWN: Move backwards
         } else if (gameState.S.isDown) {
@@ -283,7 +305,7 @@ export default class GameTwoPlayers extends Phaser.Scene {
             gameState.player2.body.velocity
           );
     
-          gameState.gandalf.anims.play("walk", true);
+          gameState.player2.anims.play("walkp2", true);
     
           // NO KEY: Stop movement
         } else {
@@ -421,7 +443,7 @@ export default class GameTwoPlayers extends Phaser.Scene {
     gameState.shot.setVelocity(x, y);
     gameState.gandalf.anims.play("shoot", true);
 
-    var magicShot = this.sound.add("magicShot");
+    var magicShot = this.sound.add("magicShot", { volume: 0.3});
     magicShot.play();
 
   }
@@ -440,9 +462,9 @@ export default class GameTwoPlayers extends Phaser.Scene {
     // SHOT MOVEMENT DIRECTION
 
     gameState.shot.setVelocity(x, y);
-    gameState.gandalf.anims.play("shoot", true);
+    gameState.player2.anims.play("shootp2", true);
 
-    var magicShot = this.sound.add("magicShot");
+    var magicShot = this.sound.add("magicShot", { volume: 0.3});
     magicShot.play();
 
   }
@@ -508,7 +530,9 @@ export default class GameTwoPlayers extends Phaser.Scene {
     gameState.score += 1;
     document.querySelector("h3").innerHTML = `Kills: ${gameState.score}`;
 
-    var orcShoot = this.sound.add("shoot", {volume: 0.5} );
+    var hitDummy = this.sound.add("dummyHit", { detune: - 300 });
+    hitDummy.play();
+    var orcShoot = this.sound.add("shoot", {volume: 0.4} );
     orcShoot.play();
   }
 

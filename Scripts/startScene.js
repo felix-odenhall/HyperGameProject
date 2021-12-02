@@ -8,6 +8,7 @@ import startBtn from "../images/startBtn.png";
 import practiceBtn from "../images/practiceBtn.png";
 import duosBtn from "../images/duosBtn.png"
 import settingsBtn from "../images/settingsBtn.png"
+import confirm from "../images/stingers.mp3"
 
 export default class StartScene extends Phaser.Scene {
     constructor() {
@@ -15,6 +16,7 @@ export default class StartScene extends Phaser.Scene {
     }
     preload() {
         this.load.audio("startAudio", startAudio);
+        this.load.audio("confirm", confirm);
         this.load.image("darkness", darkness);
         this.load.image("cover", cover);
         this.load.spritesheet("startBtn", startBtn, { frameWidth: 500, frameHeight: 160 });
@@ -88,6 +90,7 @@ export default class StartScene extends Phaser.Scene {
         this.add.image(400, 300, "background").setScale(1);
         this.add.image(400, 300, "cover").setScale(0.6);
 
+        let confirmSound = this.sound.add("confirm", { volume: 0.5 });
 
 
       
@@ -98,6 +101,7 @@ export default class StartScene extends Phaser.Scene {
         startPractice.on('pointerdown', () => {
             this.scene.stop('StartScene')
             this.scene.start('PracticeScene')
+            confirmSound.play();
         });
 
        
@@ -108,6 +112,7 @@ export default class StartScene extends Phaser.Scene {
         startGame.on('pointerdown', () => {
             this.scene.stop('StartScene')
             this.scene.start('Game')
+            confirmSound.play();
         });
 
         const startDuos = this.add.sprite(400, 420, "duosBtn").setScale(0.4);
@@ -117,6 +122,7 @@ export default class StartScene extends Phaser.Scene {
         startDuos.on('pointerdown', () => {
             this.scene.stop('StartScene')
             this.scene.start('GameTwoPlayers')
+            confirmSound.play();
         });
 
         const startSettings = this.add.sprite(400, 500, "settingsBtn").setScale(0.4);
@@ -125,7 +131,8 @@ export default class StartScene extends Phaser.Scene {
         startSettings.on('pointerout', () => startSettings.anims.play('settingsBtnOut', true))
         startSettings.on('pointerdown', () => {
             this.scene.stop('StartScene')
-            this.scene.start('GameTwoPlayers')
+            this.scene.start('SettingsScene')
+            confirmSound.play();
         });
     }
 } 
