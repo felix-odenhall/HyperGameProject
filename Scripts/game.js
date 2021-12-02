@@ -24,11 +24,9 @@ let metalSong;
 
 const gameState = {
   gameOver: false,
-  gandalfSpeed: 4,
-  speedBoost: 1,
-  gandalfBoost: 10,
+  orcSpeed: 40,
   rotation: 270,
-  rotationSpeed: 150,
+  rotationSpeed: 185,
   score: 0,
   highScore: [
     { name: "empty", score: 0 },
@@ -156,7 +154,6 @@ export default class Game extends Phaser.Scene {
       frameRate: 1,
       repeat: 0,
     });
-    // this.physics.world.addCollider(orcs, gameState.shot)
 
     this.physics.add.collider(orcs, orcs);
 
@@ -165,11 +162,13 @@ export default class Game extends Phaser.Scene {
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
 
     let h3 = document.createElement("h3");
-    h3.innerHTML = `Kills: ${gameState.score}`;
+    h3.innerHTML = `Score: ${gameState.score}`;
     document.body.appendChild(h3);
   }
 
   update() {
+    // CHEATS CHEATS CHEATS CHEATS CHEATS CHEATS CHEATS CHEATS CHEATS
+
     if (Phaser.Input.Keyboard.JustDown(gameState.enter)) {
       battleSong.pause();
       this.physics.pause();
@@ -298,6 +297,7 @@ export default class Game extends Phaser.Scene {
       this.physics.pause();
 
       gameState.gameOver = true;
+
       // Checks if this is a new high score
       this.addToHighScore(gameState.score);
 
@@ -325,11 +325,12 @@ export default class Game extends Phaser.Scene {
 
     let randomOrcSpawn = Math.floor(Math.random() * 1000);
 
+    // SPEED BOOST SETTINGS SPEED BOOST SETTINGS SPEED BOOST SETTINGS SPEED BOOST SETTINGS
+
     if (randomOrcSpawn > spawnTime) {
       this.addOrcs();
-      spawnTime -= gameState.speedBoost / 10;
-      gameState.gandalfSpeed += gameState.speedBoost / gameState.gandalfBoost;
     }
+
     this.orcDirection();
     this.turnOrcs(orcs);
   }
@@ -357,6 +358,8 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf.anims.play("shoot", true);
 
     var magicShot = this.sound.add("magicShot");
+    gameState.score -= 1;
+    document.querySelector("h3").innerHTML = `Score: ${gameState.score}`;
     magicShot.play();
   }
 
@@ -411,14 +414,16 @@ export default class Game extends Phaser.Scene {
       this.physics.moveToObject,
       this.physics,
       gameState.gandalf,
-      50
+      gameState.orcSpeed
     );
   }
+
+  // HIT ORC HIT ORC HIT ORC HIT ORC HIT ORC HIT ORC HIT ORC
 
   hitOrcs(orc, shots) {
     orc.destroy();
     shots.destroy();
-    gameState.score += 1;
+    gameState.score += 3;
     document.querySelector("h3").innerHTML = `Kills: ${gameState.score}`;
 
     var orcShoot = this.sound.add("shoot");
@@ -439,12 +444,14 @@ export default class Game extends Phaser.Scene {
     });
   };
 
+  // PRINT HIGH SCORE BOARD - PRINT HIGH SCORE BOARD - PRINT HIGH SCORE BOARD
+
   printScoreBoard = function () {
     let div = document.createElement("div");
     let ol = document.createElement("ol");
     let h2 = document.createElement("h2");
     div.id = "high-score";
-    h2.innerText = "New High Score!";
+    h2.innerText = "High Score!";
     div.appendChild(h2);
     div.appendChild(ol);
     document.querySelector("body").appendChild(div);
