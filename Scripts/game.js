@@ -11,8 +11,8 @@ import orcSprite3 from "../images/orc_sprite3.png";
 import dead from "../images/dead.mp3";
 import shoot from "../images/shoot.mp3";
 import magicShot from "../images/magic.wav";
-import battleMusic from "../images/battle.mp3"
-import metalMusic from "../images/metal.mp3"
+import battleMusic from "../images/battle.mp3";
+import metalMusic from "../images/metal.mp3";
 
 let orcs;
 let positions;
@@ -24,13 +24,17 @@ let metalSong;
 
 const gameState = {
   gameOver: false,
-  gandalfSpeed: 4,
-  speedBoost: 1,
-  gandalfBoost: 10,
+  orcSpeed: 40,
   rotation: 270,
-  rotationSpeed: 150,
+  rotationSpeed: 185,
   score: 0,
-  highScore: [1, 1, 1, 1, 1],
+  highScore: [
+    { name: "empty", score: 0 },
+    { name: "empty", score: 0 },
+    { name: "empty", score: 0 },
+    { name: "empty", score: 0 },
+    { name: "empty", score: 0 },
+  ],
 };
 
 export default class Game extends Phaser.Scene {
@@ -43,9 +47,9 @@ export default class Game extends Phaser.Scene {
       frameHeight: 48,
     });
 
-    this.load.spritesheet("gandalfShoot", gandalfShoot, { 
-      frameWidth: 48, 
-      frameHeight: 48 
+    this.load.spritesheet("gandalfShoot", gandalfShoot, {
+      frameWidth: 48,
+      frameHeight: 48,
     });
 
     this.load.spritesheet("orc", orcSprite2, {
@@ -58,38 +62,33 @@ export default class Game extends Phaser.Scene {
       shot
     );
     this.load.image("background", bg2);
-
     this.load.image("darkness", darkness);
-
     this.load.audio("dead", dead);
-
     this.load.audio("shoot", shoot);
-
     this.load.audio("metalMusic", metalMusic);
-
-
     this.load.audio("magicShot", magicShot);
-
     this.load.audio("battleMusic", battleMusic);
 
     // If a high score is stored in localStorage, it will replace the gameState.highScore array.
     if (localStorage.getItem("highScores")) {
-      gameState.highScore = JSON.parse(localStorage.getItem("highScores"));
+      let local = JSON.parse(localStorage.getItem("highScores"));
+      gameState.highScore = local;
     }
-
   }
 
   create() {
-
-    battleSong = this.sound.add("battleMusic", {volume: 0.5});
-    battleSong.play()
+    battleSong = this.sound.add("battleMusic", { volume: 0.5 });
+    battleSong.play();
 
     this.anims.create({
-      key: 'shoot',
-      frames: this.anims.generateFrameNumbers("gandalfShoot", { start: 0, end: 4, }),
+      key: "shoot",
+      frames: this.anims.generateFrameNumbers("gandalfShoot", {
+        start: 0,
+        end: 4,
+      }),
       frameRate: 20,
-      repeat: 0
-    })
+      repeat: 0,
+    });
 
     this.anims.create({
       key: "orcSprite",
@@ -99,7 +98,6 @@ export default class Game extends Phaser.Scene {
     });
 
     this.add.image(400, 300, "background").setScale(1);
-    console.log(bg);
 
     positions = {
       centerX: this.physics.world.bounds.width / 2,
@@ -156,28 +154,26 @@ export default class Game extends Phaser.Scene {
       frameRate: 1,
       repeat: 0,
     });
-    // this.physics.world.addCollider(orcs, gameState.shot)
 
     this.physics.add.collider(orcs, orcs);
-
-    console.log(gameState.gandalf);
 
     shadows = this.add.image(400, 300, "darkness").setDepth(3);
 
     // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE
 
     let h3 = document.createElement("h3");
-    h3.innerHTML = `Kills: ${gameState.score}`;
+    h3.innerHTML = `Score: ${gameState.score}`;
     document.body.appendChild(h3);
   }
 
   update() {
+    // CHEATS CHEATS CHEATS CHEATS CHEATS CHEATS CHEATS CHEATS CHEATS
 
     if (Phaser.Input.Keyboard.JustDown(gameState.enter)) {
       battleSong.pause();
       this.physics.pause();
       var cheat = prompt("");
-      switch(cheat) {
+      switch (cheat) {
         case "":
           this.physics.resume();
           battleSong.resume();
@@ -192,19 +188,19 @@ export default class Game extends Phaser.Scene {
           var playerDead = this.sound.add("dead");
           playerDead.autoplay = true;
           playerDead.play();
-            break;
+          break;
         case "i r ass":
           this.physics.resume();
           battleSong.resume();
           localStorage.clear();
-            break;
+          break;
         // case "i r winner":
         //   this.physics.resume();
         //   battleSong.resume();
         //   gameState.score += 5000;
         //     break;
         case "i hate darkness":
-          shadows.destroy()
+          shadows.destroy();
           this.physics.resume();
           battleSong.resume();
           break;
@@ -216,15 +212,14 @@ export default class Game extends Phaser.Scene {
         //   metalSong.play()
         //   break;
       }
-} 
-
+    }
 
     gameState.gandalf.angle = gameState.rotation;
 
     // GAME OVER: Ends update() execution
     if (gameState.gameOver) {
       gameState.gandalf.anims.play("idle");
-      battleSong.stop()
+      battleSong.stop();
       return;
     }
 
@@ -302,6 +297,7 @@ export default class Game extends Phaser.Scene {
       this.physics.pause();
 
       gameState.gameOver = true;
+
       // Checks if this is a new high score
       this.addToHighScore(gameState.score);
 
@@ -329,11 +325,12 @@ export default class Game extends Phaser.Scene {
 
     let randomOrcSpawn = Math.floor(Math.random() * 1000);
 
+    // SPEED BOOST SETTINGS SPEED BOOST SETTINGS SPEED BOOST SETTINGS SPEED BOOST SETTINGS
+
     if (randomOrcSpawn > spawnTime) {
       this.addOrcs();
-      spawnTime -= gameState.speedBoost / 10;
-      gameState.gandalfSpeed += gameState.speedBoost / gameState.gandalfBoost;
     }
+
     this.orcDirection();
     this.turnOrcs(orcs);
   }
@@ -361,8 +358,9 @@ export default class Game extends Phaser.Scene {
     gameState.gandalf.anims.play("shoot", true);
 
     var magicShot = this.sound.add("magicShot");
+    gameState.score -= 1;
+    document.querySelector("h3").innerHTML = `Score: ${gameState.score}`;
     magicShot.play();
-
   }
 
   // ADDING ORCS
@@ -416,14 +414,16 @@ export default class Game extends Phaser.Scene {
       this.physics.moveToObject,
       this.physics,
       gameState.gandalf,
-      50
+      gameState.orcSpeed
     );
   }
+
+  // HIT ORC HIT ORC HIT ORC HIT ORC HIT ORC HIT ORC HIT ORC
 
   hitOrcs(orc, shots) {
     orc.destroy();
     shots.destroy();
-    gameState.score += 1;
+    gameState.score += 3;
     document.querySelector("h3").innerHTML = `Kills: ${gameState.score}`;
 
     var orcShoot = this.sound.add("shoot");
@@ -444,38 +444,51 @@ export default class Game extends Phaser.Scene {
     });
   };
 
+  // PRINT HIGH SCORE BOARD - PRINT HIGH SCORE BOARD - PRINT HIGH SCORE BOARD
+
+  printScoreBoard = function () {
+    let div = document.createElement("div");
+    let ol = document.createElement("ol");
+    let h2 = document.createElement("h2");
+    div.id = "high-score";
+    h2.innerText = "High Score!";
+    div.appendChild(h2);
+    div.appendChild(ol);
+    document.querySelector("body").appendChild(div);
+
+    // Sorts gameState.highScore from highest to lowest score.
+    gameState.highScore.sort((a, b) => {
+      return b.score - a.score;
+    });
+
+    //Loops through the high score array and prints the score board.
+    // One entry per list item.
+    for (let i = 0; i < gameState.highScore.length; ++i) {
+      let li = document.createElement("li");
+      li.innerText =
+        gameState.highScore[i].name + " " + gameState.highScore[i].score;
+      ol.appendChild(li);
+    }
+  };
+
   addToHighScore = function (score) {
-    const min = Math.min(...gameState.highScore);
-
-    if (score > min) {
+    // If the new score is higher than the 5th (lowest) highscore.
+    if (score > gameState.highScore[4].score) {
+      var username = prompt("");
+      // Removes the last (lowest entry) object in the array.
+      gameState.highScore.pop();
+      // Adds the new score and username in the end of the high score array.
+      gameState.highScore.push({ name: username, score: score });
+      // Sorts the array of high score entries again.
       gameState.highScore.sort(function (a, b) {
-        return a - b;
+        return b.score - a.score;
       });
-      gameState.highScore.shift();
-      gameState.highScore.push(score);
 
-      let div = document.createElement("div");
-      let ol = document.createElement("ol");
-      let h2 = document.createElement("h2");
-      div.id = "high-score";
-      h2.innerText = "New High Score!";
-      div.appendChild(h2);
-      div.appendChild(ol);
-      document.querySelector("body").appendChild(div);
+      // Prints the new score board.
+      this.printScoreBoard();
 
-      let sortedHighScore = gameState.highScore.sort(function (a, b) {
-        return a - b;
-      });
-      sortedHighScore.reverse();
-
-      for (let i = 0; i < sortedHighScore.length; ++i) {
-        let li = document.createElement("li");
-        li.innerText = sortedHighScore[i];
-        ol.appendChild(li);
-        console.log("Done");
-      }
-      // Makes a string of the sorted high score array and saves it in localStorage
-      localStorage.setItem("highScores", JSON.stringify(sortedHighScore));
+      // Makes a string of the sorted high score object and saves it to localStorage.
+      localStorage.setItem("highScores", JSON.stringify(gameState.highScore));
     }
     return;
   };
