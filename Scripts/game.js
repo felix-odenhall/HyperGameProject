@@ -35,10 +35,6 @@ export default class Game extends Phaser.Scene {
     super({ key: "Game" });
   }
   preload() {
-    // this.load.image(
-    //   "orc", // ORC
-    //   "https://content.codecademy.com/courses/learn-phaser/physics/bug_1.png"
-    // );
     this.load.spritesheet("gandalf", gandalf, {
       frameWidth: 48,
       frameHeight: 48,
@@ -49,14 +45,11 @@ export default class Game extends Phaser.Scene {
       frameHeight: 48 
     });
 
-    this.load.spritesheet("orc", orcSprite3, {
+    this.load.spritesheet("orc", orcSprite2, {
       frameWidth: 48,
       frameHeight: 48,
     });
-    // this.load.image(
-    //   "gandalf", // GANDALF
-    //   "https://content.codecademy.com/courses/learn-phaser/physics/codey.png"
-    // );
+
     this.load.image(
       "shot", // SHOT
       shot
@@ -168,13 +161,6 @@ export default class Game extends Phaser.Scene {
     let h3 = document.createElement("h3");
     h3.innerHTML = `Kills: ${gameState.score}`;
     document.body.appendChild(h3);
-
-    // gameState.scoreText = this.add
-    //   .text(600, 25, `Kills: ${gameState.score}`, {
-    //     fontSize: "32px",
-    //     fill: "#FFF",
-    //   })
-    //   .setDepth(4);
   }
 
   update() {

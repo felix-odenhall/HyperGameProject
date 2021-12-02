@@ -209,6 +209,8 @@ export default class Game extends Phaser.Scene {
     this.turnOrcs(orcs);
     this.physics.add.collider(orcs, gameState.gandalf)
 
+
+
   }
 
   update() {
@@ -347,6 +349,7 @@ export default class Game extends Phaser.Scene {
 
     var magicShot = this.sound.add("magicShot");
     magicShot.play();
+
   }
 
   hitOrcs(orc, shots) {

@@ -4,6 +4,8 @@ import bg from "../images/background_stone.png";
 import cover from "../images/cover.jpg";
 import darkness from "../images/darkness.png";
 import startAudio from "../images/startAudio.mp3";
+import startBtn from "../images/startBtn.png";
+import practiceBtn from "../images/practiceBtn.png";
 
 export default class StartScene extends Phaser.Scene {
     constructor() {
@@ -13,6 +15,8 @@ export default class StartScene extends Phaser.Scene {
         this.load.audio("startAudio", startAudio);
         this.load.image("darkness", darkness);
         this.load.image("cover", cover);
+        this.load.spritesheet("startBtn", startBtn, { frameWidth: 500, frameHeight: 160 });
+        this.load.spritesheet("practiceBtn", practiceBtn, { frameWidth: 500, frameHeight: 160 });
 
     }
 
@@ -22,49 +26,73 @@ export default class StartScene extends Phaser.Scene {
         // gameSound.autoplay = true;
         // gameSound.play();
 
+        this.anims.create({
+            key: 'startBtnOut',
+            frames: [{ key: 'startBtn', frame: 0 }],
+            frameRate: 1,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'startBtnHover',
+            frames: [{ key: 'startBtn', frame: 1 }],
+            frameRate: 1,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'startBtnClick',
+            frames: [{ key: 'startBtn', frame: 2 }],
+            frameRate: 1,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'practiceBtnOut',
+            frames: [{ key: 'practiceBtn', frame: 0 }],
+            frameRate: 1,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'practiceBtnHover',
+            frames: [{ key: 'practiceBtn', frame: 1 }],
+            frameRate: 1,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'practiceBtnClick',
+            frames: [{ key: 'practiceBtn', frame: 2 }],
+            frameRate: 1,
+            repeat: 0
+        })
+
         this.add.image(400, 300, "background").setScale(1);
         this.add.image(400, 300, "cover").setScale(0.6);
 
-        // this.add.text(150, 150, 'Click to start', { fill: '#ffffff', fontSize: '60px' });
-        // this.add.text(280, 210, 'Game!', { fill: '#ffffff', fontSize: '100px' });
-        // this.input.on('pointerdown', () => {
-        //     this.scene.stop('StartScene')
-        //     this.scene.start('PracticeScene')
-        // })
 
-        const startPractice = this.add.text(100, 200, 'Start Practice', { fill: '#0f0', fontSize: '50px' });
+
+      
+        const startPractice = this.add.sprite(400, 250, "practiceBtn").setScale(0.5);
         startPractice.setInteractive();
-        startPractice.on('pointerover', () => startPractice.setColor('#FF00FF'))
-        startPractice.on('pointerout', () => startPractice.setColor('#0f0'))
+        startPractice.on('pointerover', () => startPractice.anims.play('practiceBtnHover', true))
+        startPractice.on('pointerout', () => startPractice.anims.play('practiceBtnOut', true))
         startPractice.on('pointerdown', () => {
+            startPractice.anims.play('practiceBtnClick', true)
             this.scene.stop('StartScene')
             this.scene.start('PracticeScene')
         });
 
-        const startGame = this.add.text(100, 300, 'Start Game', { fill: '#0f0', fontSize: '50px' });
+       
+        const startGame = this.add.sprite(400, 350, "startBtn").setScale(0.5);
         startGame.setInteractive();
-        startGame.on('pointerover', () => startGame.setColor('#FF00FF'))
-        startGame.on('pointerout', () => startGame.setColor('#0f0'))
+        startGame.on('pointerover', () => startGame.anims.play('startBtnHover', true))
+        startGame.on('pointerout', () => startGame.anims.play('startBtnOut', true))
         startGame.on('pointerdown', () => {
+            startGame.anims.play('startBtnClick', true)
             this.scene.stop('StartScene')
             this.scene.start('Game')
         });
     }
 }
-
-// var config = {
-//     type: Phaser.AUTO,
-//     width: 800,
-//     height: 600,
-//     backgroundColor: "#4488aa",
-//     scene: [StartScene],
-//     physics: {
-//         default: "arcade",
-//         arcade: {
-//             gravity: { y: 0 },
-//             debug: true,
-//         },
-//     },
-// };
-
-// var start = new Phaser.Game(config);
