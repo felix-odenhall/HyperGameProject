@@ -14,6 +14,9 @@ import magicShot from "../images/magic.wav";
 import battleMusic from "../images/battle.mp3";
 import metalMusic from "../images/metal.mp3";
 
+// Added this for async function
+import 'regenerator-runtime/runtime'
+
 let orcs;
 let positions;
 let spawnTime = 980;
@@ -21,6 +24,33 @@ let newOrc;
 let battleSong;
 let shadows;
 let metalSong;
+
+//Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBO52r8EjTyMiiUxIlpWCvJy0uulgdqruE",
+  authDomain: "hypergame-2a26d.firebaseapp.com",
+  databaseURL: "https://hypergame-2a26d-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "hypergame-2a26d",
+  storageBucket: "hypergame-2a26d.appspot.com",
+  messagingSenderId: "875434823954",
+  appId: "1:875434823954:web:d596ac0decd4fe14ffa3cb",
+  measurementId: "G-Z82EZ95YDF"
+};
+
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore(app);
+
+//Importing data from FireStore
+var highScoreCollection = [];
+db.collection("highScoreList").get().then((querySnapshot) => {
+  querySnapshot.forEach((doc) => {
+    highScoreCollection.push(doc.data());
+  });
+
+  console.log("After reading from firestore,  highScoreCollection : ", JSON.stringify(highScoreCollection));
+
+});
 
 const gameState = {
   gameOver: false,
@@ -298,6 +328,9 @@ export default class Game extends Phaser.Scene {
 
       gameState.gameOver = true;
 
+      // Store the data
+      gameState.highScore = highScoreCollection;
+
       // Checks if this is a new high score
       this.addToHighScore(gameState.score);
 
@@ -497,9 +530,29 @@ export default class Game extends Phaser.Scene {
       // Prints the new score board.
       this.printScoreBoard();
 
+      // Updating all the documents into the firestore
+      // TODO: Only one document should be updated for the new user in the firestore
+      updateAllFromCollection("highScoreList");
+
       // Makes a string of the sorted high score object and saves it to localStorage.
       localStorage.setItem("highScores", JSON.stringify(gameState.highScore));
     }
     return;
   };
+}
+
+//Funcion which updates all player names with their scores into the firestore database
+const updateAllFromCollection = async (collectionName) => {
+  const collection = db.collection(collectionName);
+  var index = 0;
+  collection.get().then(response => {
+    let batch = db.batch()
+    response.docs.forEach((doc) => {
+      const docRef = db.collection(collectionName).doc(doc.id)
+      batch.update(docRef, gameState.highScore[index++])
+    })
+    batch.commit().then(() => {
+      console.log("updated all documents inside collectionName");
+    })
+  })
 }
