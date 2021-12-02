@@ -116,8 +116,8 @@ export default class GameTwoPlayers extends Phaser.Scene {
     // CURSORS CURSORS CURSORS CURSORS CURSORS CURSORS CURSORS
 
     gameState.cursors = this.input.keyboard.createCursorKeys();
-    gameState.enter = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.ENTER
+    gameState.space = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE
     );
 
     //Player 2
@@ -134,8 +134,8 @@ export default class GameTwoPlayers extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.D
     );
 
-    gameState.B = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.B
+    gameState.shift = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SHIFT
     );
 
     // ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS
@@ -246,7 +246,7 @@ export default class GameTwoPlayers extends Phaser.Scene {
     }
 
     // [  SPACE  ]: Shoot
-    if (Phaser.Input.Keyboard.JustDown(gameState.enter)) {
+    if (Phaser.Input.Keyboard.JustDown(gameState.space)) {
       this.createShot();
     }
 
@@ -292,7 +292,7 @@ export default class GameTwoPlayers extends Phaser.Scene {
         }
     
         // [  SPACE  ]: Shoot
-        if (Phaser.Input.Keyboard.JustDown(gameState.B)) {
+        if (Phaser.Input.Keyboard.JustDown(gameState.shift)) {
           this.createShot2();
         }
 

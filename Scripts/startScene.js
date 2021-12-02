@@ -7,6 +7,7 @@ import startAudio from "../images/startAudio.mp3";
 import startBtn from "../images/startBtn.png";
 import practiceBtn from "../images/practiceBtn.png";
 import duosBtn from "../images/duosBtn.png"
+import settingsBtn from "../images/settingsBtn.png"
 
 export default class StartScene extends Phaser.Scene {
     constructor() {
@@ -19,6 +20,7 @@ export default class StartScene extends Phaser.Scene {
         this.load.spritesheet("startBtn", startBtn, { frameWidth: 500, frameHeight: 160 });
         this.load.spritesheet("practiceBtn", practiceBtn, { frameWidth: 500, frameHeight: 160 });
         this.load.spritesheet("duosBtn", duosBtn, { frameWidth: 500, frameHeight: 160 });
+        this.load.spritesheet("settingsBtn", settingsBtn, { frameWidth: 500, frameHeight: 160 });
     }
 
     create() {
@@ -42,13 +44,6 @@ export default class StartScene extends Phaser.Scene {
         })
 
         this.anims.create({
-            key: 'startBtnClick',
-            frames: [{ key: 'startBtn', frame: 2 }],
-            frameRate: 1,
-            repeat: 0
-        })
-
-        this.anims.create({
             key: 'practiceBtnOut',
             frames: [{ key: 'practiceBtn', frame: 0 }],
             frameRate: 1,
@@ -58,13 +53,6 @@ export default class StartScene extends Phaser.Scene {
         this.anims.create({
             key: 'practiceBtnHover',
             frames: [{ key: 'practiceBtn', frame: 1 }],
-            frameRate: 1,
-            repeat: 0
-        })
-
-        this.anims.create({
-            key: 'practiceBtnClick',
-            frames: [{ key: 'practiceBtn', frame: 2 }],
             frameRate: 1,
             repeat: 0
         })
@@ -84,8 +72,15 @@ export default class StartScene extends Phaser.Scene {
         })
 
         this.anims.create({
-            key: 'duosBtnClick',
-            frames: [{ key: 'duosBtn', frame: 2 }],
+            key: 'settingsBtnOut',
+            frames: [{ key: 'settingsBtn', frame: 0 }],
+            frameRate: 1,
+            repeat: 0
+        })
+
+        this.anims.create({
+            key: 'settingsBtnHover',
+            frames: [{ key: 'settingsBtn', frame: 1 }],
             frameRate: 1,
             repeat: 0
         })
@@ -96,33 +91,39 @@ export default class StartScene extends Phaser.Scene {
 
 
       
-        const startPractice = this.add.sprite(400, 250, "practiceBtn").setScale(0.5);
+        const startPractice = this.add.sprite(400, 260, "practiceBtn").setScale(0.4);
         startPractice.setInteractive();
         startPractice.on('pointerover', () => startPractice.anims.play('practiceBtnHover', true))
         startPractice.on('pointerout', () => startPractice.anims.play('practiceBtnOut', true))
         startPractice.on('pointerdown', () => {
-            startPractice.anims.play('practiceBtnClick', true)
             this.scene.stop('StartScene')
             this.scene.start('PracticeScene')
         });
 
        
-        const startGame = this.add.sprite(400, 350, "startBtn").setScale(0.5);
+        const startGame = this.add.sprite(400, 340, "startBtn").setScale(0.4);
         startGame.setInteractive();
         startGame.on('pointerover', () => startGame.anims.play('startBtnHover', true))
         startGame.on('pointerout', () => startGame.anims.play('startBtnOut', true))
         startGame.on('pointerdown', () => {
-            startGame.anims.play('startBtnClick', true)
             this.scene.stop('StartScene')
             this.scene.start('Game')
         });
 
-        const startDuos = this.add.sprite(400, 450, "duosBtn").setScale(0.5);
+        const startDuos = this.add.sprite(400, 420, "duosBtn").setScale(0.4);
         startDuos.setInteractive();
         startDuos.on('pointerover', () => startDuos.anims.play('duosBtnHover', true))
         startDuos.on('pointerout', () => startDuos.anims.play('duosBtnOut', true))
         startDuos.on('pointerdown', () => {
-            startDuos.anims.play('duosBtnClick', true)
+            this.scene.stop('StartScene')
+            this.scene.start('GameTwoPlayers')
+        });
+
+        const startSettings = this.add.sprite(400, 500, "settingsBtn").setScale(0.4);
+        startSettings.setInteractive();
+        startSettings.on('pointerover', () => startSettings.anims.play('settingsBtnHover', true))
+        startSettings.on('pointerout', () => startSettings.anims.play('settingsBtnOut', true))
+        startSettings.on('pointerdown', () => {
             this.scene.stop('StartScene')
             this.scene.start('GameTwoPlayers')
         });

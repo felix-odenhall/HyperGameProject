@@ -64,7 +64,7 @@ export default class Game extends Phaser.Scene {
 
   create() {
 
-    practiceSong = this.sound.add("practiceMusic");
+    practiceSong = this.sound.add("practiceMusic", {volume: 0.5});
     practiceSong.play();
     this.add.image(400, 300, "background").setScale(1);
     this.add.text(10, 540, 'Press the arrow keys to move the Gandalf,', { fill: '#0f0', fontSize: '20px' });
