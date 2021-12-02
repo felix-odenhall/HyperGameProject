@@ -111,6 +111,9 @@ export default class Game extends Phaser.Scene {
     gameState.spacebar = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
     );
+    gameState.enter = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.ENTER
+    );
 
     // ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS ORCS
 
@@ -164,6 +167,41 @@ export default class Game extends Phaser.Scene {
   }
 
   update() {
+
+    if (Phaser.Input.Keyboard.JustDown(gameState.enter)) {
+      battleSong.pause();
+      this.physics.pause();
+      var cheat = prompt("");
+      switch(cheat) {
+        case "":
+          this.physics.resume();
+          battleSong.resume();
+          break;
+        case "robin hood":
+          this.physics.resume();
+          battleSong.resume();
+          gameState.score += 1000;
+          break;
+        case "resign":
+          gameState.gameOver = true;
+          var playerDead = this.sound.add("dead");
+          playerDead.autoplay = true;
+          playerDead.play();
+            break;
+        case "i r ass":
+          this.physics.resume();
+          battleSong.resume();
+          localStorage.clear();
+            break;
+        // case "i r winner":
+        //   this.physics.resume();
+        //   battleSong.resume();
+        //   gameState.score += 5000;
+        //     break;
+      }
+} 
+
+
     gameState.gandalf.angle = gameState.rotation;
 
     // GAME OVER: Ends update() execution
