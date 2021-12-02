@@ -26,7 +26,7 @@ const gameState = {
   gameOver: false,
   orcSpeed: 40,
   rotation: 270,
-  rotationSpeed: 185,
+  rotationSpeed: 360,
   score: 0,
   highScore: [
     { name: "empty", score: 0 },
@@ -223,26 +223,26 @@ export default class Game extends Phaser.Scene {
       return;
     }
 
-    // 🡸 LEFT: Rotate left
+    // 🡸 PRESS LEFT: Rotate left
     if (gameState.cursors.left.isDown) {
       gameState.rotation -= 3.5;
 
-      // 🡺 RIGHT: Rotate right
+      // 🡺 PRESS RIGHT: Rotate right
     } else if (gameState.cursors.right.isDown) {
       gameState.rotation += 3.5;
     }
 
-    // 🡹 UP: Move forward
+    // 🡹 PRESS UP: Move forward
     if (gameState.cursors.up.isDown) {
       this.physics.velocityFromRotation(
         gameState.gandalf.rotation,
-        gameState.rotationSpeed,
+        gameState.rotationSpeed / 2,
         gameState.gandalf.body.velocity
       );
 
       gameState.gandalf.anims.play("walk", true);
 
-      // 🡻 DOWN: Move backwards
+      // 🡻 PRESS DOWN: Move backwards
     } else if (gameState.cursors.down.isDown) {
       this.physics.velocityFromRotation(
         gameState.gandalf.rotation,
@@ -352,13 +352,15 @@ export default class Game extends Phaser.Scene {
       gameState.gandalf.y,
       "shot"
     );
-    // SHOT MOVEMENT DIRECTION
 
+    // SHOT MOVEMENT DIRECTION
     gameState.shot.setVelocity(x, y);
     gameState.gandalf.anims.play("shoot", true);
 
     var magicShot = this.sound.add("magicShot");
-    gameState.score -= 1;
+    if (gameState.score > 0) {
+      gameState.score -= 1;
+    }
     document.querySelector("h3").innerHTML = `Score: ${gameState.score}`;
     magicShot.play();
   }
@@ -406,7 +408,15 @@ export default class Game extends Phaser.Scene {
 
       // newOrc.anims.play('orcSprite')
     }
+
+    if (gameState.score > 100) {
+      spawnTime = 975;
+    } else {
+      spawnTime = 980;
+    }
   }
+
+  // UPDATE END - - - UPDATE END - - - UPDATE END - - - UPDATE END - - - UPDATE END - - - UPDATE END - - - UPDATE END - - - UPDATE END - - - UPDATE END
 
   orcDirection() {
     Phaser.Utils.Array.Each(
@@ -424,7 +434,7 @@ export default class Game extends Phaser.Scene {
     orc.destroy();
     shots.destroy();
     gameState.score += 3;
-    document.querySelector("h3").innerHTML = `Kills: ${gameState.score}`;
+    document.querySelector("h3").innerHTML = `Score: ${gameState.score}`;
 
     var orcShoot = this.sound.add("shoot");
     orcShoot.play();
