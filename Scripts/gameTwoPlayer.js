@@ -18,7 +18,7 @@ import dummyHit from "../images/slimejump.mp3"
 
 let orcs;
 let positions;
-let spawnTime = 900;
+let spawnTime2p = 930;
 let newOrc;
 let duoSong;
 let shadows;
@@ -81,7 +81,6 @@ export default class GameTwoPlayers extends Phaser.Scene {
     this.load.audio("shoot", shoot);
 
     this.load.audio("dummyHit", dummyHit);
-
 
 
     this.load.audio("magicShot", magicShot);
@@ -411,9 +410,9 @@ export default class GameTwoPlayers extends Phaser.Scene {
 
     let randomOrcSpawn = Math.floor(Math.random() * 1000);
 
-    if (randomOrcSpawn > spawnTime) {
+    if (randomOrcSpawn > spawnTime2p) {
       this.addOrcs();
-      spawnTime -= gameState.speedBoost / 10;
+      spawnTime2p -= gameState.speedBoost / 10;
       gameState.gandalfSpeed += gameState.speedBoost / gameState.gandalfBoost;
     }
     this.orcDirection();

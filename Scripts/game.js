@@ -199,6 +199,7 @@ export default class Game extends Phaser.Scene {
 
     if (Phaser.Input.Keyboard.JustDown(gameState.enter)) {
       battleSong.pause();
+      this.addOrcs(false)
       this.physics.pause();
       var cheat = prompt("So, you want to cheat... Go on then...");
       switch (cheat) {
@@ -249,17 +250,13 @@ export default class Game extends Phaser.Scene {
           this.physics.resume();
           battleSong.resume();
           break;
-        case "show me cheats":
+        case "i cheat":
           this.showCheat()
-          // this.physics.resume();
-          // battleSong.resume();
           break;
         default:
           this.physics.resume();
           battleSong.resume();
           break;
-
-
 
       }
     }
@@ -577,13 +574,13 @@ export default class Game extends Phaser.Scene {
 
 
   showCheat() {
-    let cheat1 = this.add.text(200, 100, "i hate darkness = remove the darkness")
-    let cheat2 = this.add.text(200, 150, "i r big = get bigger")
-    let cheat3 = this.add.text(200, 200, "i r small = get smaller")
-    let cheat4 = this.add.text(200, 250, "i r normal = normal size")
-    let cheat5 = this.add.text(200, 300, "too easy = increase the speed of the orcs")
-    let cheat6 = this.add.text(200, 350, "move = change to a random position")
-    let cheat7 = this.add.text(200, 400, "there are a few more...")
+    let cheat1 = this.add.text(200, 100, "i hate darkness = remove the darkness").setDepth(6)
+    let cheat2 = this.add.text(200, 150, "i r big = get bigger").setDepth(6)
+    let cheat3 = this.add.text(200, 200, "i r small = get smaller").setDepth(6)
+    let cheat4 = this.add.text(200, 250, "i r normal = normal size").setDepth(6)
+    let cheat5 = this.add.text(200, 300, "too easy = increase the speed of the orcs").setDepth(6)
+    let cheat6 = this.add.text(200, 350, "move = change to a random position").setDepth(6)
+    let cheat7 = this.add.text(200, 400, "there are a few more...").setDepth(6)
     this.input.on("pointerup", () => {
       this.physics.resume()
       battleSong.resume()
