@@ -249,10 +249,17 @@ export default class Game extends Phaser.Scene {
           this.physics.resume();
           battleSong.resume();
           break;
+        case "show me cheats":
+          this.showCheat()
+          // this.physics.resume();
+          // battleSong.resume();
+          break;
         default:
           this.physics.resume();
           battleSong.resume();
           break;
+
+
 
       }
     }
@@ -567,8 +574,30 @@ export default class Game extends Phaser.Scene {
   speedUpOrcs() {
     gameState.orcSpeed = 80
   }
-  moveAway(){
 
+
+  showCheat() {
+    let cheat1 = this.add.text(200, 100, "i hate darkness = remove the darkness")
+    let cheat2 = this.add.text(200, 150, "i r big = get bigger")
+    let cheat3 = this.add.text(200, 200, "i r small = get smaller")
+    let cheat4 = this.add.text(200, 250, "i r normal = normal size")
+    let cheat5 = this.add.text(200, 300, "too easy = increase the speed of the orcs")
+    let cheat6 = this.add.text(200, 350, "move = change to a random position")
+    let cheat7 = this.add.text(200, 400, "there are a few more...")
+    this.input.on("pointerup", () => {
+      this.physics.resume()
+      battleSong.resume()
+      cheat1.destroy()
+      cheat2.destroy()
+      cheat3.destroy()
+      cheat4.destroy()
+      cheat5.destroy()
+      cheat6.destroy()
+      cheat7.destroy()
+    });
+  }
+
+  moveAway(){
     let randomGandalf = Math.floor(Math.random() * 8);
     if (randomGandalf == 0) {
       gameState.gandalf.setPosition(200, 200)

@@ -18,7 +18,7 @@ import dummyHit from "../images/slimejump.mp3"
 
 let orcs;
 let positions;
-let spawnTime = 980;
+let spawnTime = 900;
 let newOrc;
 let duoSong;
 let shadows;
