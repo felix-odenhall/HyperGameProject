@@ -217,7 +217,8 @@ export default class Game extends Phaser.Scene {
         case "i r ass":
           this.physics.resume();
           battleSong.resume();
-          localStorage.clear();
+          // localStorage.clear();
+          // Add code to delete highscore from firestore here
           break;
         case "i hate darkness":
           shadows.destroy();
