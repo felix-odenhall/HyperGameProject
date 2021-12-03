@@ -13,7 +13,6 @@ import orcSprite3 from "../images/orc_sprite3.png";
 import dead from "../images/dead.mp3";
 import shoot from "../images/shoot.mp3";
 import magicShot from "../images/magic.wav";
-import battleMusic from "../images/battle.mp3"
 import metalMusic from "../images/metal.mp3"
 import dummyHit from "../images/slimejump.mp3"
 
@@ -21,7 +20,7 @@ let orcs;
 let positions;
 let spawnTime = 980;
 let newOrc;
-let battleSong;
+let duoSong;
 let shadows;
 let metalSong;
 
@@ -87,7 +86,7 @@ export default class GameTwoPlayers extends Phaser.Scene {
 
     this.load.audio("magicShot", magicShot);
 
-    this.load.audio("battleMusic", metalMusic);
+    this.load.audio("duoMusic", metalMusic);
 
     // If a high score is stored in localStorage, it will replace the gameState.highScore array.
     if (localStorage.getItem("highScores")) {
@@ -98,8 +97,8 @@ export default class GameTwoPlayers extends Phaser.Scene {
 
   create() {
 
-    battleSong = this.sound.add("battleMusic", {volume: 0.2});
-    battleSong.play()
+    duoSong = this.sound.add("duoMusic", {volume: 0.1});
+    duoSong.play()
 
     this.anims.create({
       key: "walk",
@@ -226,7 +225,7 @@ export default class GameTwoPlayers extends Phaser.Scene {
 
     // GAME OVER: Ends update() execution
     if (gameState.gameOver) {
-      battleSong.stop()
+      duoSong.stop()
       return;
     }
 
@@ -344,7 +343,7 @@ export default class GameTwoPlayers extends Phaser.Scene {
 
     this.physics.add.collider(gameState.gandalf, orcs, () => {
       // Audio for StartScene
-      var playerDead = this.sound.add("dead");
+      var playerDead = this.sound.add("dead", { volume: 0.4});
       playerDead.autoplay = true;
       playerDead.play();
       this.physics.pause();
@@ -379,7 +378,7 @@ export default class GameTwoPlayers extends Phaser.Scene {
 
     this.physics.add.collider(gameState.player2, orcs, () => {
       // Audio for StartScene
-      var playerDead = this.sound.add("dead");
+      var playerDead = this.sound.add("dead", { volume: 0.4});
       playerDead.autoplay = true;
       playerDead.play();
       this.physics.pause();
@@ -424,7 +423,9 @@ export default class GameTwoPlayers extends Phaser.Scene {
   restartGame() {
     gameState.gameOver = false;
     gameState.score = 0;
-    this.scene.restart();
+    this.scene.stop('Game')
+    this.scene.start('StartScene')
+    duoeSong.stop()
   }
 
   createShot() {

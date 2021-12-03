@@ -12,7 +12,6 @@ import dead from "../images/dead.mp3";
 import shoot from "../images/shoot.mp3";
 import magicShot from "../images/magic.wav";
 import battleMusic from "../images/battle.mp3";
-import metalMusic from "../images/metal.mp3";
 import dummyHit from "../images/slimejump.mp3"
 
 // Added this for async function
@@ -24,7 +23,6 @@ let spawnTime = 980;
 let newOrc;
 let battleSong;
 let shadows;
-let metalSong;
 
 //Firebase configuration
 const firebaseConfig = {
@@ -96,7 +94,6 @@ export default class Game extends Phaser.Scene {
     this.load.image("darkness", darkness);
     this.load.audio("dead", dead);
     this.load.audio("shoot", shoot);
-    this.load.audio("metalMusic", metalMusic);
     this.load.audio("magicShot", magicShot);
     this.load.audio("battleMusic", battleMusic);
     this.load.audio("dummyHit", dummyHit);
@@ -213,7 +210,7 @@ export default class Game extends Phaser.Scene {
           break;
         case "resign":
           gameState.gameOver = true;
-          var playerDead = this.sound.add("dead");
+          var playerDead = this.sound.add("dead", { volume: 0.4});
           playerDead.autoplay = true;
           playerDead.play();
           break;
@@ -360,7 +357,9 @@ export default class Game extends Phaser.Scene {
   restartGame() {
     gameState.gameOver = false;
     gameState.score = 0;
-    this.scene.restart();
+    this.scene.stop('Game')
+    this.scene.start('StartScene')
+    battleSong.stop()
   }
 
   createShot() {

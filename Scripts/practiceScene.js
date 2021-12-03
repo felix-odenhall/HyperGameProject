@@ -18,6 +18,7 @@ import dummyHit from "../images/slimejump.mp3"
 import shoot from "../images/shoot.mp3";
 import startGameBtn from "../images/startGameBtn.png"
 import confirm from "../images/stingers.mp3"
+import bush from "../images/bush.png"
 
 
 
@@ -25,6 +26,10 @@ let orcs;
 let positions;
 let practiceSong;
 let confirmSound;
+let bushes1;
+let bushes2;
+let bushes3;
+let bushes4;
 
 const gameState = {
   gameOver: false,
@@ -73,6 +78,8 @@ export default class Game extends Phaser.Scene {
 
     this.load.spritesheet("startGameBtn", startGameBtn, { frameWidth: 500, frameHeight: 160 });
 
+    this.load.image("bushesImg", bush)
+
   }
 
   create() {
@@ -93,7 +100,7 @@ export default class Game extends Phaser.Scene {
         repeat: 0
     })
 
-    practiceSong = this.sound.add("practiceMusic", {volume: 0.5});
+    practiceSong = this.sound.add("practiceMusic", {volume: 0.3});
     practiceSong.play();
     this.add.image(400, 300, "background2").setScale(1);
     this.add.text(10, 540, 'Press the arrow keys to move Gandalf,', { fill: '#000', fontSize: '20px' });
@@ -121,7 +128,7 @@ export default class Game extends Phaser.Scene {
     // GANDALF GANDALF GANDALF GANDALF GANDALF GANDALF GANDALF
 
     gameState.gandalf = this.physics.add
-      .sprite(positions.centerX, positions.centerY, "gandalf")
+      .sprite(positions.centerX, positions.centerY + 100, "gandalf")
       .setCollideWorldBounds(true)
       .setScale(1)
       .setBodySize(20, 20)
@@ -226,7 +233,17 @@ export default class Game extends Phaser.Scene {
       repeat: 0
     })
 
+    bushes1 = this.physics.add
+    .sprite(200, 250, "bushesImg").setScale(1).setImmovable(true)
 
+    bushes2 = this.physics.add
+    .sprite(350, 150, "bushesImg").setScale(1).setImmovable(true)
+
+    bushes3 = this.physics.add
+    .sprite(450, 230, "bushesImg").setScale(1).setImmovable(true)
+
+    bushes4 = this.physics.add
+    .sprite(550, 350, "bushesImg").setScale(1).setImmovable(true)
 
 
     gameState.scoreText = this.add.text(600, 25, `Kills: ${gameState.score}`, {
@@ -237,6 +254,10 @@ export default class Game extends Phaser.Scene {
     this.createOrcs()
     this.turnOrcs(orcs);
     this.physics.add.collider(orcs, gameState.gandalf)
+    this.physics.add.collider(bushes1, gameState.gandalf)
+    this.physics.add.collider(bushes2, gameState.gandalf)
+    this.physics.add.collider(bushes3, gameState.gandalf)
+    this.physics.add.collider(bushes4, gameState.gandalf)
 
 
     
@@ -317,6 +338,11 @@ export default class Game extends Phaser.Scene {
 
     this.physics.add.collider([orcs], gameState.shot, this.hitOrcs, null, this);
 
+    this.physics.add.collider(bushes1, gameState.shot, this.hitBush, null, this);
+    this.physics.add.collider(bushes2, gameState.shot, this.hitBush, null, this);
+    this.physics.add.collider(bushes3, gameState.shot, this.hitBush, null, this);
+    this.physics.add.collider(bushes4, gameState.shot, this.hitBush, null, this);
+
 
     // YOU WIN
 
@@ -390,6 +416,10 @@ export default class Game extends Phaser.Scene {
     hitDummy.play();
     var orcShoot = this.sound.add("shoot", {volume: 0.2} );
     orcShoot.play();
+  }
+
+  hitBush(bush, shots) {
+    shots.destroy();
   }
 
   turnOrcs = function (type) {
