@@ -35,7 +35,6 @@ const firebaseConfig = {
   appId: "1:875434823954:web:d596ac0decd4fe14ffa3cb",
   measurementId: "G-Z82EZ95YDF"
 };
-
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore(app);
@@ -225,10 +224,36 @@ export default class Game extends Phaser.Scene {
           this.physics.resume();
           battleSong.resume();
           break;
+        case "i r big":
+          this.giantMilk()
+          this.physics.resume();
+          battleSong.resume();
+          break;
+        case "i r small":
+          this.ant()
+          this.physics.resume();
+          battleSong.resume();
+          break;
+        case "too easy":
+          this.speedUpOrcs() 
+          this.physics.resume();
+          battleSong.resume();
+          break;
+        case "i r normal":
+          this.normal()
+          this.physics.resume();
+          battleSong.resume();
+          break;
+        case "move":
+          this.moveAway()
+          this.physics.resume();
+          battleSong.resume();
+          break;
         default:
           this.physics.resume();
           battleSong.resume();
           break;
+
       }
     }
 
@@ -530,6 +555,42 @@ export default class Game extends Phaser.Scene {
     }
     return;
   };
+  giantMilk(){
+    gameState.gandalf.setScale(2).setBodySize(25, 25);
+  }
+  ant(){
+    gameState.gandalf.setScale(0.5).setBodySize(15, 15);
+  }
+  normal(){
+    gameState.gandalf.setScale(1).setBodySize(30, 30);
+  }
+  speedUpOrcs() {
+    gameState.orcSpeed = 80
+  }
+  moveAway(){
+
+    let randomGandalf = Math.floor(Math.random() * 8);
+    if (randomGandalf == 0) {
+      gameState.gandalf.setPosition(200, 200)
+    } else if (randomGandalf == 1) {
+      gameState.gandalf.setPosition(250, 300)
+     } else if (randomGandalf == 2) {
+      gameState.gandalf.setPosition(350, 400)
+     } else if (randomGandalf == 3) {
+      gameState.gandalf.setPosition(400, 480)
+     } else if (randomGandalf == 4) {
+      gameState.gandalf.setPosition(250, 480)
+     } else if (randomGandalf == 5) {
+      gameState.gandalf.setPosition(400, 100)
+     } else if (randomGandalf == 6) {
+      gameState.gandalf.setPosition(680, 360)
+     } else if (randomGandalf == 7) {
+      gameState.gandalf.setPosition(680, 80)
+     } else if (randomGandalf == 8) {
+      gameState.gandalf.setPosition(80, 480)
+     }
+  }
+  
 }
 
 //Funcion which updates all player names with their scores into the firestore database

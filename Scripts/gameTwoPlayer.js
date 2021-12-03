@@ -97,7 +97,7 @@ export default class GameTwoPlayers extends Phaser.Scene {
 
   create() {
 
-    duoSong = this.sound.add("duoMusic", {volume: 0.1});
+    duoSong = this.sound.add("duoMusic", {volume: 0.8});
     duoSong.play()
 
     this.anims.create({
