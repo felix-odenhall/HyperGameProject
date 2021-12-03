@@ -2,6 +2,7 @@ console.log(" Inside PracticeScene");
 import { World } from "matter";
 import Phaser from "phaser";
 import bg from "../images/background_stone.png";
+import bg2 from "../images/backgroundTraining.png";
 import gandalf from "../images/wizzard_sprite2.png";
 import shot from "../images/shot.png";
 import gandalfShoot from "../images/gandalf_shoot_sprite2.png";
@@ -15,12 +16,15 @@ import magicShot from "../images/magic.wav";
 import practiceMusic from "../images/the-low-whistle.mp3"
 import dummyHit from "../images/slimejump.mp3"
 import shoot from "../images/shoot.mp3";
+import startGameBtn from "../images/startGameBtn.png"
+import confirm from "../images/stingers.mp3"
 
 
 
 let orcs;
 let positions;
 let practiceSong;
+let confirmSound;
 
 const gameState = {
   gameOver: false,
@@ -42,6 +46,9 @@ export default class Game extends Phaser.Scene {
     //   "orc", // ORC
     //   orcSprite
     // );
+
+    this.load.audio("confirm", confirm);
+
     this.load.spritesheet("gandalf", gandalf, { frameWidth: 48, frameHeight: 48 });
     this.load.spritesheet("orc", orcSprite, { frameWidth: 48, frameHeight: 48 });
 
@@ -57,22 +64,40 @@ export default class Game extends Phaser.Scene {
       "shot", // SHOT
       shot
     );
-    this.load.image("background", bg);
+    this.load.image("background2", bg2);
 
     this.load.audio("magicShot", magicShot);
     this.load.audio("dummyHit", dummyHit);
     this.load.audio("practiceMusic", practiceMusic);
     this.load.audio("shoot", shoot);
 
+    this.load.spritesheet("startGameBtn", startGameBtn, { frameWidth: 500, frameHeight: 160 });
+
   }
 
   create() {
 
+    confirmSound = this.sound.add("confirm", { volume: 0.5 });
+
+    this.anims.create({
+        key: 'startGameBtnOut',
+        frames: [{ key: 'startGameBtn', frame: 0 }],
+        frameRate: 1,
+        repeat: 0
+    })
+
+    this.anims.create({
+        key: 'startGameBtnHover',
+        frames: [{ key: 'startGameBtn', frame: 1 }],
+        frameRate: 1,
+        repeat: 0
+    })
+
     practiceSong = this.sound.add("practiceMusic", {volume: 0.5});
     practiceSong.play();
-    this.add.image(400, 300, "background").setScale(1);
-    this.add.text(10, 540, 'Press the arrow keys to move the Gandalf,', { fill: '#0f0', fontSize: '20px' });
-    this.add.text(10, 570, 'Press the SpaceBar to shoot', { fill: '#0f0', fontSize: '20px' });
+    this.add.image(400, 300, "background2").setScale(1);
+    this.add.text(10, 540, 'Press the arrow keys to move Gandalf,', { fill: '#000', fontSize: '20px' });
+    this.add.text(10, 570, 'Press the SpaceBar to shoot', { fill: '#000', fontSize: '20px' });
     positions = {
       centerX: this.physics.world.bounds.width / 2,
       centerY: this.physics.world.bounds.height / 2,
@@ -214,6 +239,7 @@ export default class Game extends Phaser.Scene {
     this.physics.add.collider(orcs, gameState.gandalf)
 
 
+    
 
   }
 
@@ -299,15 +325,14 @@ export default class Game extends Phaser.Scene {
       practiceSong.stop();
       gameState.gameOver = true;
 
-      const startGame = this.add.text(200, 200, 'Start Game', { fill: '#0f0', fontSize: '50px' });
+      const startGame = this.add.sprite(400, 300, "startGameBtn").setScale(0.4);
       startGame.setInteractive();
+      startGame.on('pointerover', () => startGame.anims.play('startGameBtnHover', true))
+      startGame.on('pointerout', () => startGame.anims.play('startGameBtnOut', true))
       startGame.on('pointerdown', () => {
-        this.scene.stop('PracticeScene')
-        this.scene.start('Game')
-      });
-
-      this.input.on("pointerup", () => {
-        this.scene.start('Game');
+          this.scene.stop('PracticeScene')
+          this.scene.start('Game')
+          confirmSound.play();
       });
     }
 
