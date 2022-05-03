@@ -12,10 +12,10 @@ import dead from "../images/dead.mp3";
 import shoot from "../images/shoot.mp3";
 import magicShot from "../images/magic.wav";
 import battleMusic from "../images/battle.mp3";
-import dummyHit from "../images/slimejump.mp3"
+import dummyHit from "../images/slimejump.mp3";
 
 // Added this for async function
-import 'regenerator-runtime/runtime'
+import "regenerator-runtime/runtime";
 
 let orcs;
 let positions;
@@ -28,12 +28,13 @@ let shadows;
 const firebaseConfig = {
   apiKey: "AIzaSyBO52r8EjTyMiiUxIlpWCvJy0uulgdqruE",
   authDomain: "hypergame-2a26d.firebaseapp.com",
-  databaseURL: "https://hypergame-2a26d-default-rtdb.europe-west1.firebasedatabase.app",
+  databaseURL:
+    "https://hypergame-2a26d-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "hypergame-2a26d",
   storageBucket: "hypergame-2a26d.appspot.com",
   messagingSenderId: "875434823954",
   appId: "1:875434823954:web:d596ac0decd4fe14ffa3cb",
-  measurementId: "G-Z82EZ95YDF"
+  measurementId: "G-Z82EZ95YDF",
 };
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
@@ -41,14 +42,18 @@ var db = firebase.firestore(app);
 
 //Importing data from FireStore
 var highScoreCollection = [];
-db.collection("highScoreList").get().then((querySnapshot) => {
-  querySnapshot.forEach((doc) => {
-    highScoreCollection.push(doc.data());
+db.collection("highScoreList")
+  .get()
+  .then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      highScoreCollection.push(doc.data());
+    });
+
+    console.log(
+      "After reading from firestore,  highScoreCollection : ",
+      JSON.stringify(highScoreCollection)
+    );
   });
-
-  console.log("After reading from firestore,  highScoreCollection : ", JSON.stringify(highScoreCollection));
-
-});
 
 const gameState = {
   gameOver: false,
@@ -199,7 +204,7 @@ export default class Game extends Phaser.Scene {
 
     if (Phaser.Input.Keyboard.JustDown(gameState.enter)) {
       battleSong.pause();
-      this.addOrcs(false)
+      this.addOrcs(false);
       this.physics.pause();
       var cheat = prompt("So, you want to cheat... Go on then...");
       switch (cheat) {
@@ -210,7 +215,7 @@ export default class Game extends Phaser.Scene {
           break;
         case "resign":
           gameState.gameOver = true;
-          var playerDead = this.sound.add("dead", { volume: 0.4});
+          var playerDead = this.sound.add("dead", { volume: 0.4 });
           playerDead.autoplay = true;
           playerDead.play();
           break;
@@ -226,38 +231,37 @@ export default class Game extends Phaser.Scene {
           battleSong.resume();
           break;
         case "i r big":
-          this.giantMilk()
+          this.giantMilk();
           this.physics.resume();
           battleSong.resume();
           break;
         case "i r small":
-          this.ant()
+          this.ant();
           this.physics.resume();
           battleSong.resume();
           break;
         case "too easy":
-          this.speedUpOrcs() 
+          this.speedUpOrcs();
           this.physics.resume();
           battleSong.resume();
           break;
         case "i r normal":
-          this.normal()
+          this.normal();
           this.physics.resume();
           battleSong.resume();
           break;
         case "move":
-          this.moveAway()
+          this.moveAway();
           this.physics.resume();
           battleSong.resume();
           break;
         case "i cheat":
-          this.showCheat()
+          this.showCheat();
           break;
         default:
           this.physics.resume();
           battleSong.resume();
           break;
-
       }
     }
 
@@ -293,8 +297,8 @@ export default class Game extends Phaser.Scene {
       this.physics.velocityFromRotation(
         gameState.gandalf.rotation,
         gameState.rotationSpeed -
-        gameState.rotationSpeed -
-        gameState.rotationSpeed / 2,
+          gameState.rotationSpeed -
+          gameState.rotationSpeed / 2,
         gameState.gandalf.body.velocity
       );
 
@@ -344,32 +348,35 @@ export default class Game extends Phaser.Scene {
 
       gameState.gameOver = true;
 
-      // Store the data
-      gameState.highScore = highScoreCollection;
+      this.scene.stop("Game");
+      this.scene.start("StartScene");
 
-      // Checks if this is a new high score
-      this.addToHighScore(gameState.score);
+      // // Store the data
+      // gameState.highScore = highScoreCollection;
 
-      document.querySelector("h1").setAttribute("style", "color: tomato");
-      document.querySelector("h1").innerText = "Game Over";
+      // // Checks if this is a new high score
+      // this.addToHighScore(gameState.score);
 
-      // this.orcs.anims.stop();
-      this.input.on("pointerup", () => {
-        var highScoreList = document.getElementById("high-score");
-        if (document.getElementById("high-score")) {
-          highScoreList.parentNode.removeChild(highScoreList);
-        }
-        document.querySelector("h1").setAttribute("style", "color: inherit");
-        document.querySelector("h1").innerText = "Name of the Game";
-        document.querySelector("h3").remove();
+      // document.querySelector("h1").setAttribute("style", "color: tomato");
+      // document.querySelector("h1").innerText = "Game Over";
 
-        // Updates the high score board, if a high score has ever been saved.
-        if (localStorage.getItem("highScores")) {
-          gameState.highScores = JSON.parse(localStorage.getItem("highScores"));
-        }
-        this.restartGame();
-      });
-      return;
+      // // this.orcs.anims.stop();
+      // this.input.on("pointerup", () => {
+      //   var highScoreList = document.getElementById("high-score");
+      //   if (document.getElementById("high-score")) {
+      //     highScoreList.parentNode.removeChild(highScoreList);
+      //   }
+      //   document.querySelector("h1").setAttribute("style", "color: inherit");
+      //   document.querySelector("h1").innerText = "Name of the Game";
+      //   document.querySelector("h3").remove();
+
+      //   // Updates the high score board, if a high score has ever been saved.
+      //   if (localStorage.getItem("highScores")) {
+      //     gameState.highScores = JSON.parse(localStorage.getItem("highScores"));
+      //   }
+      //   this.restartGame();
+      // });
+      // return;
     });
 
     let randomOrcSpawn = Math.floor(Math.random() * 1000);
@@ -387,9 +394,9 @@ export default class Game extends Phaser.Scene {
   restartGame() {
     gameState.gameOver = false;
     gameState.score = 0;
-    this.scene.stop('Game')
-    this.scene.start('StartScene')
-    battleSong.stop()
+    this.scene.stop("Game");
+    this.scene.start("StartScene");
+    battleSong.stop();
   }
 
   createShot() {
@@ -408,7 +415,7 @@ export default class Game extends Phaser.Scene {
     gameState.shot.setVelocity(x, y);
     gameState.gandalf.anims.play("shoot", true);
 
-    var magicShot = this.sound.add("magicShot", { volume: 0.6});
+    var magicShot = this.sound.add("magicShot", { volume: 0.6 });
     if (gameState.score > 0) {
       gameState.score -= 1;
     }
@@ -487,9 +494,9 @@ export default class Game extends Phaser.Scene {
     gameState.score += 3;
     document.querySelector("h3").innerHTML = `Score: ${gameState.score}`;
 
-    var hitDummy = this.sound.add("dummyHit", { detune: - 300 });
+    var hitDummy = this.sound.add("dummyHit", { detune: -300 });
     hitDummy.play();
-    var orcShoot = this.sound.add("shoot", {volume: 0.4} );
+    var orcShoot = this.sound.add("shoot", { volume: 0.4 });
     orcShoot.play();
   }
 
@@ -559,78 +566,84 @@ export default class Game extends Phaser.Scene {
     }
     return;
   };
-  giantMilk(){
+  giantMilk() {
     gameState.gandalf.setScale(2).setBodySize(25, 25);
   }
-  ant(){
+  ant() {
     gameState.gandalf.setScale(0.5).setBodySize(15, 15);
   }
-  normal(){
+  normal() {
     gameState.gandalf.setScale(1).setBodySize(30, 30);
   }
   speedUpOrcs() {
-    gameState.orcSpeed = 80
+    gameState.orcSpeed = 80;
   }
 
-
   showCheat() {
-    let cheat1 = this.add.text(200, 100, "i hate darkness = remove the darkness").setDepth(6)
-    let cheat2 = this.add.text(200, 150, "i r big = get bigger").setDepth(6)
-    let cheat3 = this.add.text(200, 200, "i r small = get smaller").setDepth(6)
-    let cheat4 = this.add.text(200, 250, "i r normal = normal size").setDepth(6)
-    let cheat5 = this.add.text(200, 300, "too easy = increase the speed of the orcs").setDepth(6)
-    let cheat6 = this.add.text(200, 350, "move = change to a random position").setDepth(6)
-    let cheat7 = this.add.text(200, 400, "there are a few more...").setDepth(6)
+    let cheat1 = this.add
+      .text(200, 100, "i hate darkness = remove the darkness")
+      .setDepth(6);
+    let cheat2 = this.add.text(200, 150, "i r big = get bigger").setDepth(6);
+    let cheat3 = this.add.text(200, 200, "i r small = get smaller").setDepth(6);
+    let cheat4 = this.add
+      .text(200, 250, "i r normal = normal size")
+      .setDepth(6);
+    let cheat5 = this.add
+      .text(200, 300, "too easy = increase the speed of the orcs")
+      .setDepth(6);
+    let cheat6 = this.add
+      .text(200, 350, "move = change to a random position")
+      .setDepth(6);
+    let cheat7 = this.add.text(200, 400, "there are a few more...").setDepth(6);
     this.input.on("pointerup", () => {
-      this.physics.resume()
-      battleSong.resume()
-      cheat1.destroy()
-      cheat2.destroy()
-      cheat3.destroy()
-      cheat4.destroy()
-      cheat5.destroy()
-      cheat6.destroy()
-      cheat7.destroy()
+      this.physics.resume();
+      battleSong.resume();
+      cheat1.destroy();
+      cheat2.destroy();
+      cheat3.destroy();
+      cheat4.destroy();
+      cheat5.destroy();
+      cheat6.destroy();
+      cheat7.destroy();
     });
   }
 
-  moveAway(){
+  moveAway() {
     let randomGandalf = Math.floor(Math.random() * 8);
     if (randomGandalf == 0) {
-      gameState.gandalf.setPosition(200, 200)
+      gameState.gandalf.setPosition(200, 200);
     } else if (randomGandalf == 1) {
-      gameState.gandalf.setPosition(250, 300)
-     } else if (randomGandalf == 2) {
-      gameState.gandalf.setPosition(350, 400)
-     } else if (randomGandalf == 3) {
-      gameState.gandalf.setPosition(400, 480)
-     } else if (randomGandalf == 4) {
-      gameState.gandalf.setPosition(250, 480)
-     } else if (randomGandalf == 5) {
-      gameState.gandalf.setPosition(400, 100)
-     } else if (randomGandalf == 6) {
-      gameState.gandalf.setPosition(680, 360)
-     } else if (randomGandalf == 7) {
-      gameState.gandalf.setPosition(680, 80)
-     } else if (randomGandalf == 8) {
-      gameState.gandalf.setPosition(80, 480)
-     }
+      gameState.gandalf.setPosition(250, 300);
+    } else if (randomGandalf == 2) {
+      gameState.gandalf.setPosition(350, 400);
+    } else if (randomGandalf == 3) {
+      gameState.gandalf.setPosition(400, 480);
+    } else if (randomGandalf == 4) {
+      gameState.gandalf.setPosition(250, 480);
+    } else if (randomGandalf == 5) {
+      gameState.gandalf.setPosition(400, 100);
+    } else if (randomGandalf == 6) {
+      gameState.gandalf.setPosition(680, 360);
+    } else if (randomGandalf == 7) {
+      gameState.gandalf.setPosition(680, 80);
+    } else if (randomGandalf == 8) {
+      gameState.gandalf.setPosition(80, 480);
+    }
   }
-  
 }
 
 //Funcion which updates all player names with their scores into the firestore database
 const updateAllFromCollection = async (collectionName) => {
   const collection = db.collection(collectionName);
   var index = 0;
-  collection.get().then(response => {
-    let batch = db.batch()
+  collection.get().then((response) => {
+    let batch = db.batch();
     response.docs.forEach((doc) => {
-      const docRef = db.collection(collectionName).doc(doc.id)
-      batch.update(docRef, gameState.highScore[index++])
-    })
+      const docRef = db.collection(collectionName).doc(doc.id);
+      batch.update(docRef, gameState.highScore[index++]);
+    });
     batch.commit().then(() => {
       console.log("updated all documents inside collectionName");
-    })
-  })
-}
+    });
+  });
+};
