@@ -40,20 +40,20 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore(app);
 
-//Importing data from FireStore
-var highScoreCollection = [];
-db.collection("highScoreList")
-  .get()
-  .then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      highScoreCollection.push(doc.data());
-    });
+// //Importing data from FireStore
+// var highScoreCollection = [];
+// db.collection("highScoreList")
+//   .get()
+//   .then((querySnapshot) => {
+//     querySnapshot.forEach((doc) => {
+//       highScoreCollection.push(doc.data());
+//     });
 
-    console.log(
-      "After reading from firestore,  highScoreCollection : ",
-      JSON.stringify(highScoreCollection)
-    );
-  });
+//     console.log(
+//       "After reading from firestore,  highScoreCollection : ",
+//       JSON.stringify(highScoreCollection)
+//     );
+//   });
 
 const gameState = {
   gameOver: false,
@@ -61,13 +61,13 @@ const gameState = {
   rotation: 270,
   rotationSpeed: 360,
   score: 0,
-  highScore: [
-    { name: "empty", score: 0 },
-    { name: "empty", score: 0 },
-    { name: "empty", score: 0 },
-    { name: "empty", score: 0 },
-    { name: "empty", score: 0 },
-  ],
+  // highScore: [
+  //   { name: "empty", score: 0 },
+  //   { name: "empty", score: 0 },
+  //   { name: "empty", score: 0 },
+  //   { name: "empty", score: 0 },
+  //   { name: "empty", score: 0 },
+  // ],
 };
 
 export default class Game extends Phaser.Scene {
@@ -102,11 +102,11 @@ export default class Game extends Phaser.Scene {
     this.load.audio("battleMusic", battleMusic);
     this.load.audio("dummyHit", dummyHit);
 
-    // If a high score is stored in localStorage, it will replace the gameState.highScore array.
-    if (localStorage.getItem("highScores")) {
-      let local = JSON.parse(localStorage.getItem("highScores"));
-      gameState.highScore = local;
-    }
+    // // If a high score is stored in localStorage, it will replace the gameState.highScore array.
+    // if (localStorage.getItem("highScores")) {
+    //   let local = JSON.parse(localStorage.getItem("highScores"));
+    //   gameState.highScore = local;
+    // }
   }
 
   create() {
@@ -348,36 +348,38 @@ export default class Game extends Phaser.Scene {
 
       gameState.gameOver = true;
 
-      this.scene.stop("Game");
-      this.scene.start("StartScene");
-
-      // // Store the data
-      // gameState.highScore = highScoreCollection;
-
-      // // Checks if this is a new high score
-      // this.addToHighScore(gameState.score);
-
-      // document.querySelector("h1").setAttribute("style", "color: tomato");
-      // document.querySelector("h1").innerText = "Game Over";
-
-      // // this.orcs.anims.stop();
-      // this.input.on("pointerup", () => {
-      //   var highScoreList = document.getElementById("high-score");
-      //   if (document.getElementById("high-score")) {
-      //     highScoreList.parentNode.removeChild(highScoreList);
-      //   }
-      //   document.querySelector("h1").setAttribute("style", "color: inherit");
-      //   document.querySelector("h1").innerText = "Name of the Game";
-      //   document.querySelector("h3").remove();
-
-      //   // Updates the high score board, if a high score has ever been saved.
-      //   if (localStorage.getItem("highScores")) {
-      //     gameState.highScores = JSON.parse(localStorage.getItem("highScores"));
-      //   }
-      //   this.restartGame();
-      // });
-      // return;
+      this.input.on("pointerup", () => {
+        this.restartGame();
+        document.querySelector("h3").remove();
+      });
     });
+
+    // // Store the data
+    // gameState.highScore = highScoreCollection;
+
+    // // Checks if this is a new high score
+    // this.addToHighScore(gameState.score);
+
+    // document.querySelector("h1").setAttribute("style", "color: tomato");
+    // document.querySelector("h1").innerText = "Game Over";
+
+    // // this.orcs.anims.stop();
+    // this.input.on("pointerup", () => {
+    //   var highScoreList = document.getElementById("high-score");
+    //   if (document.getElementById("high-score")) {
+    //     highScoreList.parentNode.removeChild(highScoreList);
+    //   }
+    //   document.querySelector("h1").setAttribute("style", "color: inherit");
+    //   document.querySelector("h1").innerText = "Name of the Game";
+    //   document.querySelector("h3").remove();
+
+    //   // Updates the high score board, if a high score has ever been saved.
+    //   if (localStorage.getItem("highScores")) {
+    //     gameState.highScores = JSON.parse(localStorage.getItem("highScores"));
+    //   }
+    //   this.restartGame();
+    // });
+    // return;
 
     let randomOrcSpawn = Math.floor(Math.random() * 1000);
 
@@ -516,56 +518,56 @@ export default class Game extends Phaser.Scene {
 
   // PRINT HIGH SCORE BOARD - PRINT HIGH SCORE BOARD - PRINT HIGH SCORE BOARD
 
-  printScoreBoard = function () {
-    let div = document.createElement("div");
-    let ol = document.createElement("ol");
-    let h2 = document.createElement("h2");
-    div.id = "high-score";
-    h2.innerText = "High Score!";
-    div.appendChild(h2);
-    div.appendChild(ol);
-    document.querySelector("body").appendChild(div);
+  // printScoreBoard = function () {
+  //   let div = document.createElement("div");
+  //   let ol = document.createElement("ol");
+  //   let h2 = document.createElement("h2");
+  //   div.id = "high-score";
+  //   h2.innerText = "High Score!";
+  //   div.appendChild(h2);
+  //   div.appendChild(ol);
+  //   document.querySelector("body").appendChild(div);
 
-    // Sorts gameState.highScore from highest to lowest score.
-    gameState.highScore.sort((a, b) => {
-      return b.score - a.score;
-    });
+  //   // Sorts gameState.highScore from highest to lowest score.
+  //   gameState.highScore.sort((a, b) => {
+  //     return b.score - a.score;
+  //   });
 
-    //Loops through the high score array and prints the score board.
-    // One entry per list item.
-    for (let i = 0; i < gameState.highScore.length; ++i) {
-      let li = document.createElement("li");
-      li.innerText =
-        gameState.highScore[i].name + " " + gameState.highScore[i].score;
-      ol.appendChild(li);
-    }
-  };
+  //   //Loops through the high score array and prints the score board.
+  //   // One entry per list item.
+  //   for (let i = 0; i < gameState.highScore.length; ++i) {
+  //     let li = document.createElement("li");
+  //     li.innerText =
+  //       gameState.highScore[i].name + " " + gameState.highScore[i].score;
+  //     ol.appendChild(li);
+  //   }
+  // };
 
-  addToHighScore = function (score) {
-    // If the new score is higher than the 5th (lowest) highscore.
-    if (score > gameState.highScore[4].score) {
-      var username = prompt("Enter Player Name");
-      // Removes the last (lowest entry) object in the array.
-      gameState.highScore.pop();
-      // Adds the new score and username in the end of the high score array.
-      gameState.highScore.push({ name: username, score: score });
-      // Sorts the array of high score entries again.
-      gameState.highScore.sort(function (a, b) {
-        return b.score - a.score;
-      });
+  // addToHighScore = function (score) {
+  //   // If the new score is higher than the 5th (lowest) highscore.
+  //   if (score > gameState.highScore[4].score) {
+  //     var username = prompt("Enter Player Name");
+  //     // Removes the last (lowest entry) object in the array.
+  //     gameState.highScore.pop();
+  //     // Adds the new score and username in the end of the high score array.
+  //     gameState.highScore.push({ name: username, score: score });
+  //     // Sorts the array of high score entries again.
+  //     gameState.highScore.sort(function (a, b) {
+  //       return b.score - a.score;
+  //     });
 
-      // Prints the new score board.
-      this.printScoreBoard();
+  //     // Prints the new score board.
+  //     this.printScoreBoard();
 
-      // Updating all the documents into the firestore
-      // TODO: Only one document should be updated for the new user in the firestore
-      updateAllFromCollection("highScoreList");
+  //     // Updating all the documents into the firestore
+  //     // TODO: Only one document should be updated for the new user in the firestore
+  //     updateAllFromCollection("highScoreList");
 
-      // Makes a string of the sorted high score object and saves it to localStorage.
-      localStorage.setItem("highScores", JSON.stringify(gameState.highScore));
-    }
-    return;
-  };
+  //     // Makes a string of the sorted high score object and saves it to localStorage.
+  //     localStorage.setItem("highScores", JSON.stringify(gameState.highScore));
+  //   }
+  //   return;
+  // };
   giantMilk() {
     gameState.gandalf.setScale(2).setBodySize(25, 25);
   }
@@ -632,18 +634,18 @@ export default class Game extends Phaser.Scene {
   }
 }
 
-//Funcion which updates all player names with their scores into the firestore database
-const updateAllFromCollection = async (collectionName) => {
-  const collection = db.collection(collectionName);
-  var index = 0;
-  collection.get().then((response) => {
-    let batch = db.batch();
-    response.docs.forEach((doc) => {
-      const docRef = db.collection(collectionName).doc(doc.id);
-      batch.update(docRef, gameState.highScore[index++]);
-    });
-    batch.commit().then(() => {
-      console.log("updated all documents inside collectionName");
-    });
-  });
-};
+// //Funcion which updates all player names with their scores into the firestore database
+// const updateAllFromCollection = async (collectionName) => {
+//   const collection = db.collection(collectionName);
+//   var index = 0;
+//   collection.get().then((response) => {
+//     let batch = db.batch();
+//     response.docs.forEach((doc) => {
+//       const docRef = db.collection(collectionName).doc(doc.id);
+//       batch.update(docRef, gameState.highScore[index++]);
+//     });
+//     batch.commit().then(() => {
+//       console.log("updated all documents inside collectionName");
+//     });
+//   });
+// };
