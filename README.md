@@ -1,22 +1,27 @@
-# HyperGameProject
-
+<h1> HyperGameProject </h1>
 Step 1
 npm install
 
 Step2
 npm run start
 
--- PSUEDO CODE --
+<h3>Hyper Island Project</h3>
 
-Set a timeout between shots ---
+<strong>Brief:</strong> Group project to create a 2D game using the Phaser library
 
-shot should go in the direction Gandalf is facing ....
+<strong>Timeframe:</strong> Three weeks.
 
-shots should be removed from the game when hit world bounds
+<strong>Description:</strong> This is a top down 2D game where you play as a wizzard shooting enemies. There is both a single player mode with a highscore function* and a two player mode where two players can play on the same computer. This game is also deployed on netlify: https://hi-game-project-fsm.netlify.app/
 
-To solve the regeneratorRuntime problem when async function is used, do this:
--------------------------------------------------
-- Install regenerator-runtime
-npm install --save regenerator-runtime
 
-- require import 'regenerator-runtime/runtime' at the top of the file that you're using async function
+<strong>Key learnings:</strong>
+<ul>
+<li>Working with the Phaser library</li>
+<li>Node.js</li>
+<li>Import/Export in JavaScript</li>
+ <li>Debugging</li>
+ </ul>
+
+ <h5>*the Firebase account has expired so the highscore is no longer supported</h5>
+ 
+ <em>Side note: I did all the graphics in the game, including the sprite animation for both the players and the enemies. (I did not create the landing page picture) </em>
